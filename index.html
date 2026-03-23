@@ -136,13 +136,15 @@
        <label class="block text-xs font-medium text-gray-700 mb-1">Username</label> 
        <input type="text" id="sellerUsername" autocomplete="off" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm transition-all" placeholder="Masukkan username" onkeydown="handleEnterKey(event, 'sellerPassword')">
       </div>
-      <div class="mb-4 relative">
+      <div class="mb-4">
        <label class="block text-xs font-medium text-gray-700 mb-1">Password</label> 
-       <input type="password" id="sellerPassword" autocomplete="off" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent pr-10 text-sm transition-all" placeholder="Masukkan password" onkeydown="handleEnterKey(event, 'sellerSubmitBtn')"> 
-       <button type="button" onclick="togglePassword()" class="absolute right-3 top-[26px] text-gray-500 hover:text-gray-700">
-        <svg id="eyeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-        <svg id="eyeOffIcon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
-       </button>
+       <div class="relative">
+         <input type="password" id="sellerPassword" autocomplete="off" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent pr-10 text-sm transition-all" placeholder="Masukkan password" onkeydown="handleEnterKey(event, 'sellerSubmitBtn')"> 
+         <button type="button" onclick="togglePassword()" class="absolute right-3 inset-y-0 flex items-center text-gray-500 hover:text-gray-700">
+          <svg id="eyeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+          <svg id="eyeOffIcon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+         </button>
+       </div>
       </div>
       <button type="submit" id="sellerSubmitBtn" class="w-full btn-gradient text-white py-2.5 rounded-lg font-semibold hover:shadow-lg transition-all text-xs"> Masuk </button>
      </form>
@@ -388,7 +390,7 @@
      <!-- Stock Tab -->
      <div id="sellerStockContent" class="hidden space-y-4">
       <h2 class="text-xl font-bold text-gray-800 mb-4">Manajemen Stok</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3" id="stockGrid">
+      <div class="grid grid-cols-2 gap-3" id="stockGrid">
        <!-- Stock items rendered here -->
       </div>
      </div>
@@ -1189,7 +1191,7 @@
     // --- PESANAN PEMBELI ---
     function updateBuyerOrders() {
       if (!currentBuyer) return;
-      const orders = allData.filter(d => d.type === 'order' && d.username === currentBuyer.username);
+      const orders = allData.filter(d => d.type === 'order' && d.username === currentBuyer.username && !d.hidden_by_buyer);
       const list = document.getElementById('buyerOrdersList');
 
       if (orders.length === 0) {
@@ -1232,6 +1234,21 @@
         const payMethod = o1.payment_method === 'cash' ? 'COD' : 'QRIS';
         const catatanText = o1.catatan ? `<div class="mt-1.5 text-[9px] text-gray-600 bg-white border border-gray-100 px-1.5 py-1 rounded italic w-full shadow-sm">📝 Catatan: ${o1.catatan}</div>` : '';
 
+        let actionBtn = '';
+        if (o1.status === 'completed') {
+          actionBtn = `
+            <button onclick="hideBuyerOrderGroup('${dateIso}')" class="bg-red-50 text-red-500 border border-red-100 hover:bg-red-100 p-1.5 rounded transition-colors" title="Hapus Riwayat">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </button>
+          `;
+        } else {
+          actionBtn = `
+            <button onclick="cancelBuyerOrderGroup('${dateIso}')" class="bg-red-500 text-white hover:bg-red-600 px-2.5 py-1 rounded font-bold text-[10px] transition-colors shadow-sm">
+              Batalkan
+            </button>
+          `;
+        }
+
         return `
           <div class="bg-white rounded-xl p-2.5 card-shadow mb-3 border border-orange-100 border-t-4 border-t-orange-400 relative">
             <div class="flex gap-1.5 mb-2 pb-2 border-b border-gray-50 flex-wrap">
@@ -1257,9 +1274,7 @@
               <div class="text-[10px] font-bold text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded">Est: ${estimasi}</div>
               <div class="flex items-center gap-2">
                 <div class="font-black gradient-text text-sm">Rp ${total.toLocaleString()}</div>
-                <button onclick="deleteBuyerOrderGroup('${dateIso}')" class="bg-red-50 text-red-500 border border-red-100 hover:bg-red-100 p-1.5 rounded transition-colors" title="Hapus Riwayat">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                </button>
+                ${actionBtn}
               </div>
             </div>
           </div>
@@ -1267,14 +1282,33 @@
       }).join('');
     }
 
-    function deleteBuyerOrderGroup(dateIso) {
+    function hideBuyerOrderGroup(dateIso) {
       customConfirm('Hapus riwayat pesanan ini dari daftar Anda?', async () => {
         const groupOrders = allData.filter(d => d.type === 'order' && d.username === currentBuyer.username && String(d.order_date) === String(dateIso));
         
         if(groupOrders.length === 0) { showToast('Data pesanan tidak ditemukan', 'error'); return; }
 
         for (const order of groupOrders) {
-          allData = allData.filter(d => d !== order);
+          order.hidden_by_buyer = true;
+          if (window.dataSdk) {
+            try { 
+              await window.dataSdk.update(order); 
+            } catch(e) { console.error(e); }
+          }
+        }
+        updateAllViews();
+        showToast('Riwayat pesanan berhasil dihapus');
+      });
+    }
+
+    function cancelBuyerOrderGroup(dateIso) {
+      customConfirm('Yakin ingin membatalkan pesanan ini?', async () => {
+        const groupOrders = allData.filter(d => d.type === 'order' && d.username === currentBuyer.username && String(d.order_date) === String(dateIso));
+        
+        if(groupOrders.length === 0) { showToast('Data pesanan tidak ditemukan', 'error'); return; }
+
+        for (const order of groupOrders) {
+          allData = allData.filter(d => d !== order); // Hapus lokal
           if (window.dataSdk) {
             try { 
               const idToDelete = order.id || order.__backendId;
@@ -1284,7 +1318,7 @@
           }
         }
         updateAllViews();
-        showToast('Riwayat pesanan berhasil dihapus');
+        showToast('Pesanan berhasil dibatalkan');
       });
     }
 
@@ -1454,7 +1488,7 @@
     }
 
     function renderSellerOrders() {
-      const orders = allData.filter(d => d.type === 'order');
+      const orders = allData.filter(d => d.type === 'order' && !d.hidden_by_seller);
       const list = document.getElementById('sellerOrdersList');
 
       if (orders.length === 0) { list.innerHTML = '<p class="text-gray-500 text-center py-8 text-sm">Belum ada pesanan</p>'; return; }
@@ -1559,25 +1593,32 @@
     }
 
     function deleteOrderGroup(dateIso) {
-      customConfirm('Hapus seluruh riwayat pesanan ini?', async () => {
+      customConfirm('Hapus pesanan ini dari daftar?', async () => {
         const groupOrders = allData.filter(d => d.type === 'order' && String(d.order_date) === String(dateIso));
         
         if(groupOrders.length === 0) { showToast('Data pesanan tidak ditemukan', 'error'); return; }
 
         for (const order of groupOrders) {
-          // Update Local State Instantly
-          allData = allData.filter(d => d !== order);
-          
-          if (window.dataSdk) {
-            try { 
-              const idToDelete = order.id || order.__backendId;
-              if(idToDelete) await window.dataSdk.delete(idToDelete);
-              else await window.dataSdk.delete(order); 
-            } catch(e) { console.error(e); }
+          if (order.status === 'completed') {
+            // Sembunyikan jika sudah selesai agar Rekap tetap aman (Soft Delete)
+            order.hidden_by_seller = true;
+            if (window.dataSdk) {
+              try { await window.dataSdk.update(order); } catch(e) { console.error(e); }
+            }
+          } else {
+            // Hapus sepenuhnya jika belum selesai (Hard Delete)
+            allData = allData.filter(d => d !== order);
+            if (window.dataSdk) {
+              try { 
+                const idToDelete = order.id || order.__backendId;
+                if(idToDelete) await window.dataSdk.delete(idToDelete);
+                else await window.dataSdk.delete(order); 
+              } catch(e) { console.error(e); }
+            }
           }
         }
         updateAllViews();
-        showToast('Riwayat pesanan dihapus');
+        showToast('Pesanan berhasil dihapus dari daftar');
       });
     }
 
@@ -1592,24 +1633,19 @@
     }
 
     function clearAllOrders() {
-      const completedOrders = allData.filter(d => d.type === 'order' && d.status === 'completed');
-      if (completedOrders.length === 0) { showToast('Tidak ada riwayat untuk dihapus', 'error'); return; }
+      const completedOrders = allData.filter(d => d.type === 'order' && d.status === 'completed' && !d.hidden_by_seller);
+      if (completedOrders.length === 0) { showToast('Tidak ada pesanan selesai untuk dibersihkan', 'error'); return; }
       
-      customConfirm('Hapus SEMUA riwayat pesanan selesai?', async () => {
+      customConfirm('Bersihkan SEMUA pesanan selesai dari daftar? (Data rekap tetap aman)', async () => {
         for (const order of completedOrders) { 
-          // Update Local State Instantly
-          allData = allData.filter(d => d !== order);
-
+          // Sembunyikan dari daftar, bukan dihapus (Soft Delete)
+          order.hidden_by_seller = true;
           if (window.dataSdk) {
-            try { 
-              const idToDelete = order.id || order.__backendId;
-              if(idToDelete) await window.dataSdk.delete(idToDelete);
-              else await window.dataSdk.delete(order); 
-            } catch(e) { console.error(e); }
+            try { await window.dataSdk.update(order); } catch(e) { console.error(e); }
           }
         }
         updateAllViews();
-        showToast(`${completedOrders.length} riwayat dihapus`);
+        showToast(`${completedOrders.length} pesanan dibersihkan dari daftar`);
       });
     }
 
@@ -1889,25 +1925,45 @@
 
       if (recaps.length === 0) { container.innerHTML = '<p class="text-gray-500 text-sm">Belum ada riwayat rekap</p>'; return; }
 
-      container.innerHTML = recaps.slice(0, 10).map(r => {
-        const itemId = r.id || r.__backendId;
-        return `
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 gap-2">
-          <div>
-            <div class="font-bold text-gray-700">${new Date(r.date).toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</div>
-            <div class="text-xs text-gray-500 mt-1 font-medium">📦 ${r.total_orders} Pesanan Selesai</div>
+      const today = new Date().toDateString();
+      const todayRecaps = recaps.filter(r => new Date(r.date).toDateString() === today);
+      const prevRecaps = recaps.filter(r => new Date(r.date).toDateString() !== today);
+
+      let html = '';
+
+      const generateHtml = (arr) => {
+        return arr.map(r => {
+          const itemId = r.id || r.__backendId;
+          return `
+          <div class="bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 gap-2">
+            <div>
+              <div class="font-bold text-gray-700">${new Date(r.date).toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</div>
+              <div class="text-xs text-gray-500 mt-1 font-medium">📦 ${r.total_orders} Pesanan Selesai</div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+              <span class="font-bold text-green-600 mr-2">Rp ${(r.total_sales || 0).toLocaleString()}</span>
+              <button onclick="downloadRecapTxt('${r.date}')" class="p-1.5 px-3 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 font-medium text-[11px] flex items-center gap-1 transition-all" title="Unduh TXT">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg> Unduh
+              </button>
+              <button onclick="deleteRecapHistory('${itemId}')" class="p-1.5 px-3 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 font-medium text-[11px] flex items-center gap-1 transition-all" title="Hapus Riwayat">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Hapus
+              </button>
+            </div>
           </div>
-          <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-            <span class="font-bold text-green-600 mr-2">Rp ${(r.total_sales || 0).toLocaleString()}</span>
-            <button onclick="downloadRecapTxt('${r.date}')" class="p-1.5 px-3 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 font-medium text-[11px] flex items-center gap-1 transition-all" title="Unduh TXT">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg> Unduh
-            </button>
-            <button onclick="deleteRecapHistory('${itemId}')" class="p-1.5 px-3 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 font-medium text-[11px] flex items-center gap-1 transition-all" title="Hapus Riwayat">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Hapus
-            </button>
-          </div>
-        </div>
-      `}).join('');
+        `}).join('');
+      };
+
+      if (todayRecaps.length > 0) {
+        html += `<div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 mt-1">Hari Ini</div>`;
+        html += generateHtml(todayRecaps);
+      }
+
+      if (prevRecaps.length > 0) {
+        html += `<div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 mt-4">Sebelumnya</div>`;
+        html += generateHtml(prevRecaps.slice(0, 10)); // Membatasi histori sebelumnya max 10 terakhir
+      }
+
+      container.innerHTML = html;
     }
 
     function downloadRecapTxt(dateIso) {
