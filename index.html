@@ -10,7 +10,7 @@
   <style>
     * { font-family: 'Poppins', sans-serif; }
     .gradient-bg { background: linear-gradient(135deg, #dc2626 0%, #ea580c 50%, #f97316 100%); }
-    .gradient-text { background: linear-gradient(135deg, #dc2626, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .gradient-text { background: linear-gradient(135deg, #dc2626, #f97316); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .card-shadow { box-shadow: 0 10px 40px rgba(220, 38, 38, 0.15); }
     .btn-gradient { background: linear-gradient(135deg, #dc2626, #ea580c); }
     .btn-gradient:hover { background: linear-gradient(135deg, #b91c1c, #dc2626); }
@@ -19,7 +19,7 @@
     @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
     .notification-badge { animation: pulse 2s infinite; }
     @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-    input:focus, select:focus, textarea:focus { outline: none; ring: 2px; ring-color: #f97316; }
+    input:focus, select:focus, textarea:focus { outline: none; box-shadow: 0 0 0 2px rgba(249,115,22,0.6); border-color: #f97316; }
     .qris-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 50; }
     .qris-modal-content { background: white; padding: 2rem; border-radius: 1.5rem; max-width: 90vw; }
     
@@ -561,12 +561,12 @@
     // Diperlukan agar antar device bisa langsung nyambung secara realtime tanpa direfresh di Vercel.
     // Jika Anda memiliki project Firebase, isi config di bawah ini:
     const MY_FIREBASE_CONFIG = {
-      apiKey: "",
-      authDomain: "",
-      projectId: "",
-      storageBucket: "",
-      messagingSenderId: "",
-      appId: ""
+      apiKey: "AIzaSyDISbdXrHAb8R9CxLD2gMdsfBMaBCBcn1Q",
+      authDomain: "sosiskui.firebaseapp.com",
+      projectId: "sosiskui",
+      storageBucket: "sosiskui.firebasestorage.app",
+      messagingSenderId: "190551718358",
+      appId: "G-H3SZ75CJXW"
     };
 
     async function initFirebase() {
@@ -845,8 +845,9 @@
       if (event.key === 'Enter') {
         event.preventDefault();
         const next = document.getElementById(nextId);
-        if (next.tagName === 'BUTTON') next.click();
-        else next.focus();
+        if (!next) return;
+        if (next.tagName === 'BUTTON' || next.tagName === 'A') next.click();
+        else if (typeof next.focus === 'function') next.focus();
       }
     }
 
@@ -1279,10 +1280,14 @@
       }
 
       const selected = [];
-      if (document.getElementById('bumbuBalado').checked) selected.push('Balado');
-      if (document.getElementById('bumbuKeju').checked) selected.push('Keju');
-      if (document.getElementById('bumbuSapi').checked) selected.push('Sapi');
-      if (document.getElementById('bumbuBarbeque').checked) selected.push('Barbeque');
+      const bumbuBaladoEl = document.getElementById('bumbuBalado');
+      const bumbuKejuEl = document.getElementById('bumbuKeju');
+      const bumbuSapiEl = document.getElementById('bumbuSapi');
+      const bumbuBarbequeEl = document.getElementById('bumbuBarbeque');
+      if (bumbuBaladoEl && bumbuBaladoEl.checked) selected.push('Balado');
+      if (bumbuKejuEl && bumbuKejuEl.checked) selected.push('Keju');
+      if (bumbuSapiEl && bumbuSapiEl.checked) selected.push('Sapi');
+      if (bumbuBarbequeEl && bumbuBarbequeEl.checked) selected.push('Barbeque');
       const bumbuText = selected.length > 0 ? selected.join(', ') : 'Tanpa Bumbu';
       
       const orderNotes = document.getElementById('orderNotes').value.trim();
