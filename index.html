@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sosis KUI - Order System</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="/_sdk/data_sdk.js"></script>
   <script src="/_sdk/element_sdk.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -38,7 +37,7 @@
     <div class="text-center text-white">
      <img src="https://github.com/ignbeni3-droid/ben/blob/main/Sosis_KUI-removebg.png?raw=true" alt="Sosis KUI" class="w-24 h-24 mx-auto mb-3 animate-bounce" onerror="this.style.display='none'">
      <div class="text-xl font-bold">Sosis KUI</div>
-     <div class="mt-2 text-sm">Memuat...</div>
+     <div class="mt-2 text-sm">Menghubungkan ke server...</div>
     </div>
    </div>
    
@@ -89,7 +88,7 @@
         Echa 
        </a>
       </div>
-      <p class="text-[9px] text-gray-400 font-medium">© 2026 Sosis KUI - Hak Cipta Dilindungi</p>
+      <p class="text-[10px] text-gray-400 font-medium">© 2026 Sosis KUI - Hak Cipta Dilindungi</p>
      </div>
     </div>
    </div>
@@ -152,7 +151,7 @@
    </div>
 
    <!-- Buyer Dashboard -->
-   <div id="buyerDashboard" class="hidden min-h-full flex-col pb-24 relative flex-1"> <!-- Extra padding for floating cart -->
+   <div id="buyerDashboard" class="hidden min-h-full flex-col pb-24 relative flex-1">
     <!-- Header -->
     <header class="gradient-bg text-white p-4 sticky top-0 z-30 shadow-md">
      <div class="flex items-center justify-between max-w-4xl mx-auto">
@@ -312,10 +311,6 @@
       <p class="text-xs text-gray-400 mb-2">Hubungi Kami:</p>
       <div class="flex justify-center gap-4 mb-5">
        <a href="https://wa.me/6285102203195" target="_blank" class="text-[13px] font-medium text-green-600 hover:text-green-700 flex items-center gap-1.5 transition-colors">
-        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-        Benjiro 
-       </a> 
-       <a href="https://wa.me/6281387658835" target="_blank" class="text-[13px] font-medium text-green-600 hover:text-green-700 flex items-center gap-1.5 transition-colors">
         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
         Echa 
        </a>
@@ -513,7 +508,7 @@
      <p id="confirmMessage" class="text-sm text-gray-600 mb-5">Apakah Anda yakin?</p>
      <div class="flex gap-3">
       <button id="btnCancelConfirm" class="flex-1 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold text-sm hover:bg-gray-200 transition-all">Batal</button>
-      <button id="btnOkConfirm" class="flex-1 py-2 bg-red-500 text-white rounded-lg font-semibold text-sm hover:bg-red-600 transition-all">Hapus</button>
+      <button id="btnOkConfirm" class="flex-1 py-2 bg-red-500 text-white rounded-lg font-semibold text-sm hover:bg-red-600 transition-all">Konfirmasi</button>
      </div>
     </div>
    </div>
@@ -553,7 +548,112 @@
 
     const defaultConfig = { app_title: 'Sosis KUI' };
 
-    // Initialize SDK
+    // ======= FIREBASE CLOUD SETUP =======
+    let db, auth, currentUserAuth;
+    let windowFirestore = null;
+    let unsubscribeSnapshot = null;
+
+    async function initFirebase() {
+      try {
+        const firebaseConfigStr = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        if (!firebaseConfigStr) {
+          console.warn("Konfigurasi Firebase tidak ditemukan, berjalan dalam mode lokal.");
+          return false;
+        }
+        
+        const firebaseConfig = JSON.parse(firebaseConfigStr);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-sosis';
+
+        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
+        const { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
+        windowFirestore = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+
+        const app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = windowFirestore.getFirestore(app);
+
+        // Aturan Wajib Firebase: Auth sebelum Query
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            currentUserAuth = user;
+            startFirestoreListener(appId);
+          } else {
+            currentUserAuth = null;
+            if(unsubscribeSnapshot) unsubscribeSnapshot();
+          }
+        });
+        return true;
+      } catch(e) {
+        console.error("Gagal inisialisasi cloud:", e);
+        return false;
+      }
+    }
+
+    function startFirestoreListener(appId) {
+      if (!currentUserAuth || !db || !windowFirestore) return;
+      const { collection, onSnapshot } = windowFirestore;
+      const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'sosis_kui_data');
+
+      // Mendengarkan perubahan data secara Real-Time tanpa me-refresh
+      unsubscribeSnapshot = onSnapshot(colRef, (snapshot) => {
+        const newData = [];
+        snapshot.forEach(doc => {
+          newData.push({ ...doc.data(), id: doc.id });
+        });
+        allData = newData;
+        updateAllViews(); // Update UI secara instan saat data server berubah
+      }, (err) => {
+        console.error("Gagal memuat snapshot:", err);
+      });
+    }
+
+    // Fungsi wrapper untuk Save Data ke Cloud
+    async function saveDataDoc(dataObj) {
+        if (!dataObj.id && dataObj.__backendId) dataObj.id = dataObj.__backendId;
+        if (!dataObj.id) {
+            dataObj.id = typeof crypto !== 'undefined' ? crypto.randomUUID() : 'id_' + Date.now() + Math.random();
+            dataObj.__backendId = dataObj.id;
+        }
+        
+        if (db && currentUserAuth && windowFirestore) {
+            try {
+                const { doc, setDoc, collection } = windowFirestore;
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-sosis';
+                const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'sosis_kui_data');
+                await setDoc(doc(colRef, dataObj.id), dataObj, { merge: true });
+            } catch(e) { console.error("Gagal simpan data:", e); }
+        } else {
+            // Mode Lokal jika sedang offline
+            const idx = allData.findIndex(d => d.id === dataObj.id);
+            if (idx > -1) allData[idx] = dataObj;
+            else allData.push(dataObj);
+            updateAllViews();
+        }
+    }
+
+    // Fungsi wrapper untuk Hapus Data dari Cloud
+    async function deleteDataDoc(id) {
+        if (!id) return;
+        if (db && currentUserAuth && windowFirestore) {
+            try {
+                const { doc, deleteDoc } = windowFirestore;
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-sosis';
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sosis_kui_data', id));
+            } catch(e) { console.error("Gagal hapus data:", e); }
+        } else {
+            allData = allData.filter(d => d.id !== id && d.__backendId !== id);
+            updateAllViews();
+        }
+    }
+    // ======= END FIREBASE SETUP =======
+
+    // Initialize App
     async function initApp() {
       const forceLoadTimeout = setTimeout(() => {
         const loader = document.getElementById('loadingScreen');
@@ -561,21 +661,9 @@
           loader.classList.add('hidden');
           showPage('homePage');
         }
-      }, 2500);
+      }, 3500);
 
       try {
-        const dataHandler = {
-          onDataChanged(data) {
-            allData = data || [];
-            updateAllViews();
-          }
-        };
-
-        if (window.dataSdk) {
-          const result = await window.dataSdk.init(dataHandler);
-          if (!result || !result.isOk) console.error('Data SDK init failed');
-        }
-
         if (window.elementSdk) {
           window.elementSdk.init({
             defaultConfig,
@@ -585,7 +673,8 @@
           });
         }
 
-        loadStockData();
+        // Inisialisasi Cloud
+        await initFirebase();
         
         clearTimeout(forceLoadTimeout); 
         setTimeout(() => {
@@ -793,7 +882,6 @@
       const username = document.getElementById('sellerUsername').value.trim();
       const password = document.getElementById('sellerPassword').value;
 
-      // Sesuai dengan source code yang diunggah
       if (username === 'adminkui' && password === 'ggkui26') {
         showPage('sellerDashboard');
         showSellerTab('orders');
@@ -1123,7 +1211,7 @@
       }
     }
 
-    // Checkout
+    // Checkout - Save to Cloud
     async function checkoutCart() {
       if (!currentBuyer) { showToast('Silakan login terlebih dahulu', 'error'); return; }
       if (cart.length === 0) { showToast('Keranjang kosong', 'error'); return; }
@@ -1146,11 +1234,10 @@
       
       const orderNotes = document.getElementById('orderNotes').value.trim();
       const orderDate = new Date().toISOString();
-      const tempId = Date.now(); // Untuk ID Lokal sementara
+      const tempId = Date.now(); 
 
       for (const item of cart) {
         const orderData = {
-          __backendId: 'temp_' + tempId + Math.random(),
           type: 'order',
           username: currentBuyer.username,
           user_phone: currentBuyer.phone,
@@ -1163,17 +1250,9 @@
           status: 'pending',
           order_date: orderDate
         };
-
-        if (window.dataSdk) {
-          try { await window.dataSdk.create(orderData); } 
-          catch(e) { console.error(e); allData.push(orderData); }
-        } else {
-          allData.push(orderData); // Menyimpan Lokal Jika SDK gagal/offline
-        }
+        // Langsung simpan ke cloud secara asinkron (tidak perlu menunggu per-item agar UI cepat)
+        saveDataDoc(orderData);
       }
-
-      // Pembaruan View Langsung
-      updateAllViews();
 
       cart = [];
       updateCartBadge();
@@ -1290,13 +1369,8 @@
 
         for (const order of groupOrders) {
           order.hidden_by_buyer = true;
-          if (window.dataSdk) {
-            try { 
-              await window.dataSdk.update(order); 
-            } catch(e) { console.error(e); }
-          }
+          saveDataDoc(order);
         }
-        updateAllViews();
         showToast('Riwayat pesanan berhasil dihapus');
       });
     }
@@ -1308,16 +1382,8 @@
         if(groupOrders.length === 0) { showToast('Data pesanan tidak ditemukan', 'error'); return; }
 
         for (const order of groupOrders) {
-          allData = allData.filter(d => d !== order); // Hapus lokal
-          if (window.dataSdk) {
-            try { 
-              const idToDelete = order.id || order.__backendId;
-              if(idToDelete) await window.dataSdk.delete(idToDelete);
-              else await window.dataSdk.delete(order); 
-            } catch(e) { console.error(e); }
-          }
+          deleteDataDoc(order.id || order.__backendId);
         }
-        updateAllViews();
         showToast('Pesanan berhasil dibatalkan');
       });
     }
@@ -1360,20 +1426,13 @@
             is_anonymous: isAnonymous,
             rating_date: new Date().toISOString()
           };
-          
-          allData[index] = updatedRating;
-          
-          if (window.dataSdk) {
-             try { await window.dataSdk.update(updatedRating); } catch(e) { console.error('Gagal update', e); }
-          }
-          
+          saveDataDoc(updatedRating);
           showToast('Rating berhasil diupdate!');
         }
         editingRatingId = null;
         document.getElementById('submitRatingBtn').textContent = 'Kirim Rating';
       } else {
         const ratingData = {
-          __backendId: 'rating_' + Date.now() + Math.random(),
           type: 'rating', 
           rating: currentRating, 
           review: review, 
@@ -1382,21 +1441,12 @@
           is_anonymous: isAnonymous, 
           rating_date: new Date().toISOString()
         };
-
-        // Local update instant untuk mencegah bug tidak muncul
-        allData.push(ratingData);
-
-        if (window.dataSdk) {
-          try {
-            await window.dataSdk.create(ratingData);
-          } catch(e) { console.error('Gagal mengirim ke server', e); }
-        }
+        saveDataDoc(ratingData);
         showToast('Rating berhasil dikirim!'); 
       }
 
       currentRating = 0; document.getElementById('reviewText').value = ''; document.getElementById('namedOption').checked = true;
       for (let i = 1; i <= 5; i++) { document.getElementById(`star${i}`).className = "cursor-pointer text-gray-300 hover:text-yellow-400 transition-all"; }
-      updateAllViews();
     }
 
     function renderRatings() {
@@ -1470,17 +1520,8 @@
         
         if (index > -1) {
           const ratingToDelete = allData[index];
-          allData.splice(index, 1);
-          updateAllViews();
+          deleteDataDoc(ratingToDelete.id || ratingToDelete.__backendId);
           showToast('Ulasan berhasil dihapus');
-
-          if (window.dataSdk) {
-            try { 
-              const idToDelete = ratingToDelete.id || ratingToDelete.__backendId;
-              if(idToDelete) await window.dataSdk.delete(idToDelete);
-              else await window.dataSdk.delete(ratingToDelete); 
-            } catch(e) { console.error('Gagal hapus dari server', e); }
-          }
         } else {
           showToast('Data ulasan tidak ditemukan', 'error');
         }
@@ -1514,7 +1555,6 @@
         
         const catatanText = o1.catatan ? `<div class="mt-1.5 text-[9px] text-gray-700 bg-yellow-50/80 border border-yellow-200/50 px-1.5 py-1 rounded italic w-full">📝 Catatan: ${o1.catatan}</div>` : '';
 
-        // Tampilan kartu penjual direvisi lebih rapi dan ukuran sedang
         return `
           <div class="bg-white rounded-lg p-2.5 card-shadow mb-3 border border-gray-100 border-l-4 border-l-orange-500 relative">
             <div class="flex gap-1.5 mb-1.5 flex-wrap">
@@ -1560,35 +1600,17 @@
 
     async function processOrderGroup(dateIso) {
       const groupOrders = allData.filter(d => d.type === 'order' && String(d.order_date) === String(dateIso));
-
       for (const order of groupOrders) {
-        const updated = { ...order, status: 'processing' };
-        // Update Local State Instantly
-        const idx = allData.findIndex(d => d.__backendId === order.__backendId); 
-        if (idx > -1) allData[idx] = updated;
-
-        if (window.dataSdk) {
-          try { await window.dataSdk.update(updated); } catch(e) { console.error(e); }
-        } 
+        saveDataDoc({ ...order, status: 'processing' });
       }
-      updateAllViews();
       showToast('Pesanan sedang diproses!');
     }
 
     async function completeOrderGroup(dateIso) {
       const groupOrders = allData.filter(d => d.type === 'order' && String(d.order_date) === String(dateIso));
-
       for (const order of groupOrders) {
-        const updated = { ...order, status: 'completed' };
-        // Update Local State Instantly
-        const idx = allData.findIndex(d => d.__backendId === order.__backendId); 
-        if (idx > -1) allData[idx] = updated;
-
-        if (window.dataSdk) {
-           try { await window.dataSdk.update(updated); } catch(e) { console.error(e); }
-        }
+        saveDataDoc({ ...order, status: 'completed' });
       }
-      updateAllViews();
       showToast('Pesanan telah selesai!');
     }
 
@@ -1600,31 +1622,18 @@
 
         for (const order of groupOrders) {
           if (order.status === 'completed') {
-            // Sembunyikan jika sudah selesai agar Rekap tetap aman (Soft Delete)
             order.hidden_by_seller = true;
-            if (window.dataSdk) {
-              try { await window.dataSdk.update(order); } catch(e) { console.error(e); }
-            }
+            saveDataDoc(order);
           } else {
-            // Hapus sepenuhnya jika belum selesai (Hard Delete)
-            allData = allData.filter(d => d !== order);
-            if (window.dataSdk) {
-              try { 
-                const idToDelete = order.id || order.__backendId;
-                if(idToDelete) await window.dataSdk.delete(idToDelete);
-                else await window.dataSdk.delete(order); 
-              } catch(e) { console.error(e); }
-            }
+            deleteDataDoc(order.id || order.__backendId);
           }
         }
-        updateAllViews();
         showToast('Pesanan berhasil dihapus dari daftar');
       });
     }
 
     function openNotifyGroupModal(dateIso) {
       currentNotifyGroup = allData.filter(d => d.type === 'order' && String(d.order_date) === String(dateIso));
-      
       if (currentNotifyGroup.length === 0) { showToast('Data tidak ditemukan', 'error'); return; }
       
       document.getElementById('notifyModal').classList.remove('hidden');
@@ -1638,13 +1647,9 @@
       
       customConfirm('Bersihkan SEMUA pesanan selesai dari daftar? (Data rekap tetap aman)', async () => {
         for (const order of completedOrders) { 
-          // Sembunyikan dari daftar, bukan dihapus (Soft Delete)
           order.hidden_by_seller = true;
-          if (window.dataSdk) {
-            try { await window.dataSdk.update(order); } catch(e) { console.error(e); }
-          }
+          saveDataDoc(order);
         }
-        updateAllViews();
         showToast(`${completedOrders.length} pesanan dibersihkan dari daftar`);
       });
     }
@@ -1691,26 +1696,13 @@
       const o1 = currentNotifyGroup[0];
       
       for (const order of currentNotifyGroup) {
-        const updated = { ...order, status };
-        // Update local instantly
-        const idx = allData.findIndex(d => d.__backendId === order.__backendId); 
-        if (idx > -1) allData[idx] = updated;
-
-        if (window.dataSdk) {
-           try { await window.dataSdk.update(updated); } catch(e) {}
-        }
+        saveDataDoc({ ...order, status });
       }
 
-      const notifData = { __backendId: 'notif_'+Date.now(), type: 'notification', username: o1.username, user_phone: o1.user_phone, variant: "Pesanan Anda", status, created_at: new Date().toISOString() };
-      
-      allData.push(notifData); // Local
-      if (window.dataSdk) {
-        try { await window.dataSdk.create(notifData); } catch(e) {}
-      }
+      const notifData = { type: 'notification', username: o1.username, user_phone: o1.user_phone, variant: "Pesanan Anda", status, created_at: new Date().toISOString() };
+      saveDataDoc(notifData);
 
-      updateAllViews();
-
-      if (!o1.user_phone) { showToast('Nomor telepon tidak ada', 'error'); renderSellerOrders(); closeNotifyModal(); return; }
+      if (!o1.user_phone) { showToast('Nomor telepon tidak ada', 'error'); closeNotifyModal(); return; }
 
       let phone = o1.user_phone.toString().trim().replace(/[\s\-\(\)\.]/g, '');
       if (phone.startsWith('+')) phone = phone.substring(1);
@@ -1723,7 +1715,6 @@
       closeNotifyModal();
       setTimeout(() => window.open(waUrl, '_blank', 'noopener,noreferrer'), 150);
       showToast('✅ WhatsApp dibuka & Status diupdate');
-      setTimeout(renderSellerOrders, 300);
     }
 
     // Stock Management
@@ -1778,28 +1769,25 @@
     async function markStockEmpty(name) {
       stocks[name] = 0;
       document.getElementById(`stock-${cleanId(name)}`).value = 0;
-      await saveStockData(); renderStockManagement(); showToast(`✅ ${name} ditandai HABIS`); checkLowStock();
+      await saveStockData(); showToast(`✅ ${name} ditandai HABIS`); checkLowStock();
     }
 
     async function saveStockData() {
       const existingStock = allData.find(d => d.type === 'stock');
-      const stockData = {
-        __backendId: existingStock ? existingStock.__backendId : 'stock_'+Date.now(),
-        type: 'stock', stock_sosis: stocks['Sosis'] !== undefined ? stocks['Sosis'] : 50, stock_cireng: stocks['Cireng (Isi 4pcs)'] !== undefined ? stocks['Cireng (Isi 4pcs)'] : 50, stock_scallop: stocks['Scallop'] !== undefined ? stocks['Scallop'] : 50, stock_sosis_mie: stocks['Sosis Mie'] !== undefined ? stocks['Sosis Mie'] : 50, stock_nugget_love: stocks['Nugget Love'] !== undefined ? stocks['Nugget Love'] : 50, stock_cilor: stocks['Cilor'] !== undefined ? stocks['Cilor'] : 50, stock_bintang: stocks['Bintang'] !== undefined ? stocks['Bintang'] : 50, stock_tempura: stocks['Tempura'] !== undefined ? stocks['Tempura'] : 50, date: new Date().toISOString()
-      };
+      const stockData = existingStock ? { ...existingStock } : { type: 'stock' };
       
-      // Update local first
-      if (existingStock) Object.assign(existingStock, stockData);
-      else allData.push(stockData);
+      stockData.stock_sosis = stocks['Sosis'] !== undefined ? stocks['Sosis'] : 50;
+      stockData.stock_cireng = stocks['Cireng (Isi 4pcs)'] !== undefined ? stocks['Cireng (Isi 4pcs)'] : 50;
+      stockData.stock_scallop = stocks['Scallop'] !== undefined ? stocks['Scallop'] : 50;
+      stockData.stock_sosis_mie = stocks['Sosis Mie'] !== undefined ? stocks['Sosis Mie'] : 50;
+      stockData.stock_nugget_love = stocks['Nugget Love'] !== undefined ? stocks['Nugget Love'] : 50;
+      stockData.stock_cilor = stocks['Cilor'] !== undefined ? stocks['Cilor'] : 50;
+      stockData.stock_bintang = stocks['Bintang'] !== undefined ? stocks['Bintang'] : 50;
+      stockData.stock_tempura = stocks['Tempura'] !== undefined ? stocks['Tempura'] : 50;
+      stockData.date = new Date().toISOString();
       
-      if (window.dataSdk) {
-        try {
-          if (existingStock) await window.dataSdk.update(stockData);
-          else await window.dataSdk.create(stockData);
-        } catch(e) {}
-      }
-      
-      updateAllViews(); showToast('Stok diperbarui');
+      saveDataDoc(stockData);
+      showToast('Stok diperbarui');
     }
 
     function checkLowStock() {
@@ -1905,16 +1893,9 @@
       
       const uniqueOrdersCount = new Set(todayOrders.map(o => o.order_date)).size;
       const totalSales = todayOrders.reduce((sum, o) => sum + (o.total_price || 0), 0);
-      const recapData = { __backendId: 'recap_'+Date.now(), type: 'recap', date: today.toISOString(), total_sales: totalSales, total_orders: uniqueOrdersCount };
+      const recapData = { type: 'recap', date: today.toISOString(), total_sales: totalSales, total_orders: uniqueOrdersCount };
       
-      // Update Local First
-      allData.push(recapData);
-      
-      if (window.dataSdk) {
-        try { await window.dataSdk.create(recapData); } catch(e) {}
-      }
-      
-      updateAllViews();
+      saveDataDoc(recapData);
       showToast('Rekap hari ini disimpan!');
     }
 
@@ -1989,33 +1970,13 @@
         
         if (recapToDelete) {
           const recapDateString = new Date(recapToDelete.date).toDateString();
-          
-          // Cari pesanan selesai di tanggal yang sama untuk ikut dihapus (agar mereset ke 0)
           const ordersToDelete = allData.filter(d => d.type === 'order' && d.status === 'completed' && new Date(d.order_date).toDateString() === recapDateString);
 
           for (const order of ordersToDelete) {
-            allData = allData.filter(d => d !== order);
-            if (window.dataSdk) {
-              try {
-                const idToDelete = order.id || order.__backendId;
-                if(idToDelete) await window.dataSdk.delete(idToDelete);
-                else await window.dataSdk.delete(order);
-              } catch(e) { console.error('Gagal hapus pesanan', e); }
-            }
+            deleteDataDoc(order.id || order.__backendId);
           }
-
-          // Hapus Langsung Secara Lokal
-          allData = allData.filter(d => d !== recapToDelete);
-          updateAllViews();
+          deleteDataDoc(recapToDelete.id || recapToDelete.__backendId);
           showToast('Riwayat rekap dan pesanan dihapus');
-
-          if (window.dataSdk) {
-            try { 
-              const idToDelete = recapToDelete.id || recapToDelete.__backendId;
-              if(idToDelete) await window.dataSdk.delete(idToDelete);
-              else await window.dataSdk.delete(recapToDelete); 
-            } catch(e) { console.error('Gagal hapus dari server', e); }
-          }
         } else {
           showToast('Data rekap tidak ditemukan', 'error');
         }
@@ -2076,18 +2037,8 @@
         const ratingToDelete = allData.find(d => d.type === 'rating' && (String(d.id) === String(identifier) || String(d.__backendId) === String(identifier) || String(d.rating_date) === String(identifier)));
         
         if (ratingToDelete) {
-          // Hapus Lokal
-          allData = allData.filter(d => d !== ratingToDelete);
-          updateAllViews();
+          deleteDataDoc(ratingToDelete.id || ratingToDelete.__backendId);
           showToast('Ulasan berhasil dihapus');
-
-          if (window.dataSdk) {
-            try { 
-              const idToDelete = ratingToDelete.id || ratingToDelete.__backendId;
-              if(idToDelete) await window.dataSdk.delete(idToDelete);
-              else await window.dataSdk.delete(ratingToDelete); 
-            } catch(e) { console.error('Gagal hapus dari server', e); }
-          }
         } else {
           showToast('Data ulasan tidak ditemukan', 'error');
         }
