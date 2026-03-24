@@ -10,7 +10,7 @@
   <style>
     * { font-family: 'Poppins', sans-serif; }
     .gradient-bg { background: linear-gradient(135deg, #dc2626 0%, #ea580c 50%, #f97316 100%); }
-    .gradient-text { background: linear-gradient(135deg, #dc2626, #f97316); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .gradient-text { background: linear-gradient(135deg, #dc2626, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .card-shadow { box-shadow: 0 10px 40px rgba(220, 38, 38, 0.15); }
     .btn-gradient { background: linear-gradient(135deg, #dc2626, #ea580c); }
     .btn-gradient:hover { background: linear-gradient(135deg, #b91c1c, #dc2626); }
@@ -19,7 +19,7 @@
     @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
     .notification-badge { animation: pulse 2s infinite; }
     @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-    input:focus, select:focus, textarea:focus { outline: none; box-shadow: 0 0 0 2px rgba(249,115,22,0.6); border-color: #f97316; }
+    input:focus, select:focus, textarea:focus { outline: none; ring: 2px; ring-color: #f97316; }
     .qris-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 50; }
     .qris-modal-content { background: white; padding: 2rem; border-radius: 1.5rem; max-width: 90vw; }
     
@@ -78,7 +78,7 @@
       </div>
       
       <p class="text-[10px] text-gray-400 mb-1 mt-2">Hubungi Kami:</p>
-      <div class="flex flex-wrap justify-center gap-4 mb-3">
+      <div class="flex justify-center items-center gap-4 mb-3">
        <a href="https://wa.me/6285102203195" target="_blank" class="text-xs font-medium text-green-600 hover:text-green-700 flex items-center gap-1 transition-colors">
         <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
         Benjiro 
@@ -151,7 +151,7 @@
    </div>
 
    <!-- Buyer Dashboard -->
-   <div id="buyerDashboard" class="hidden min-h-full flex-col pb-24 relative flex-1">
+   <div id="buyerDashboard" class="hidden min-h-full flex-col pb-24 relative flex-1"> <!-- Extra padding for floating cart -->
     <!-- Header -->
     <header class="gradient-bg text-white p-4 sticky top-0 z-30 shadow-md">
      <div class="flex items-center justify-between max-w-4xl mx-auto">
@@ -309,7 +309,7 @@
        <div class="bg-white p-1.5 rounded-full w-12 h-12 flex items-center justify-center shadow-sm border border-gray-100"><img src="https://github.com/ignbeni3-droid/ben/blob/main/mbd-removebg-preview.png?raw=true" alt="MBD" class="w-full h-full object-contain" onerror="this.style.display='none'"></div>
       </div>
       <p class="text-xs text-gray-400 mb-2">Hubungi Kami:</p>
-      <div class="flex flex-wrap justify-center gap-4 mb-5">
+      <div class="flex justify-center items-center gap-4 mb-5">
        <a href="https://wa.me/6285102203195" target="_blank" class="text-[13px] font-medium text-green-600 hover:text-green-700 flex items-center gap-1.5 transition-colors">
         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
         Benjiro 
@@ -566,7 +566,8 @@
       projectId: "sosiskui",
       storageBucket: "sosiskui.firebasestorage.app",
       messagingSenderId: "190551718358",
-      appId: "1:190551718358:web:f02744dd371ad8cb3ecc77"
+      appId: "1:190551718358:web:f02744dd371ad8cb3ecc77",
+      measurementId: "G-H3SZ75CJXW"
     };
 
     async function initFirebase() {
@@ -699,14 +700,16 @@
         
         clearTimeout(forceLoadTimeout); 
         setTimeout(() => {
-          document.getElementById('loadingScreen').classList.add('hidden');
+          const loader = document.getElementById('loadingScreen');
+          if(loader) loader.classList.add('hidden');
           showPage('homePage');
         }, 1000);
 
       } catch (err) {
         console.error('Init error:', err);
         clearTimeout(forceLoadTimeout);
-        document.getElementById('loadingScreen').classList.add('hidden');
+        const loader = document.getElementById('loadingScreen');
+        if(loader) loader.classList.add('hidden');
         showPage('homePage');
       }
     }
@@ -833,6 +836,7 @@
 
     function showToast(message, type = 'success') {
       const container = document.getElementById('toastContainer');
+      if (!container) return;
       const toast = document.createElement('div');
       const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
       toast.className = `toast ${bgColor} text-white px-5 py-2.5 rounded-lg shadow-lg font-medium text-xs`;
@@ -845,9 +849,8 @@
       if (event.key === 'Enter') {
         event.preventDefault();
         const next = document.getElementById(nextId);
-        if (!next) return;
-        if (next.tagName === 'BUTTON' || next.tagName === 'A') next.click();
-        else if (typeof next.focus === 'function') next.focus();
+        if (next && next.tagName === 'BUTTON') next.click();
+        else if (next) next.focus();
       }
     }
 
@@ -1064,7 +1067,7 @@
       lastItemState = {};
       menuItems.forEach(item => lastItemState[item.name] = { stock: stocks[item.name] !== undefined ? stocks[item.name] : 0, cartQty: 0 });
       stockCheckInterval = setInterval(() => {
-        if (currentBuyer && !document.getElementById('buyerDashboard').classList.contains('hidden')) {
+        if (currentBuyer && document.getElementById('buyerDashboard') && !document.getElementById('buyerDashboard').classList.contains('hidden')) {
           const menuTab = document.querySelector('#tabMenu');
           if (menuTab && menuTab.classList.contains('border-b-2')) checkStockUpdates();
         }
@@ -1143,7 +1146,8 @@
       if (totalItems > 0) {
         if(badgeTabs) { badgeTabs.textContent = totalItems; badgeTabs.classList.remove('hidden'); }
         if(badgeList) { badgeList.textContent = totalItems; badgeList.classList.remove('hidden'); }
-        if(floatingBar && document.getElementById('tabMenu').classList.contains('border-b-2')) {
+        const menuTab = document.getElementById('tabMenu');
+        if(floatingBar && menuTab && menuTab.classList.contains('border-b-2')) {
             floatingBar.classList.remove('hidden');
         }
       } else {
@@ -1153,37 +1157,54 @@
       }
 
       const total = cart.reduce((sum, c) => sum + c.total, 0);
-      document.getElementById('floatingCartTotal').textContent = `Rp ${total.toLocaleString()}`;
+      const totalEl = document.getElementById('floatingCartTotal');
+      if (totalEl) totalEl.textContent = `Rp ${total.toLocaleString()}`;
     }
 
     function updateBumbuSelection() {
       const selected = [];
-      if (document.getElementById('bumbuBalado') && document.getElementById('bumbuBalado').checked) selected.push('Balado');
-      if (document.getElementById('bumbuKeju') && document.getElementById('bumbuKeju').checked) selected.push('Keju');
-      if (document.getElementById('bumbuSapi') && document.getElementById('bumbuSapi').checked) selected.push('Sapi');
-      if (document.getElementById('bumbuBarbeque') && document.getElementById('bumbuBarbeque').checked) selected.push('Barbeque');
+      const cbs = [
+        { id: 'bumbuBalado', val: 'Balado' },
+        { id: 'bumbuKeju', val: 'Keju' },
+        { id: 'bumbuSapi', val: 'Sapi' },
+        { id: 'bumbuBarbeque', val: 'Barbeque' }
+      ];
+      
+      cbs.forEach(cb => {
+        const el = document.getElementById(cb.id);
+        if (el && el.checked) selected.push(cb.val);
+      });
 
       cart.forEach(item => { item.bumbuSelected = selected; });
 
       const preview = document.getElementById('bumbuPreview');
-      if (selected.length > 0 && cart.length > 0) {
-        document.getElementById('bumbuPreviewText').textContent = selected.join(', ');
-        preview.classList.remove('hidden');
-      } else {
-        preview.classList.add('hidden');
+      if (preview) {
+        if (selected.length > 0 && cart.length > 0) {
+          const previewText = document.getElementById('bumbuPreviewText');
+          if (previewText) previewText.textContent = selected.join(', ');
+          preview.classList.remove('hidden');
+        } else {
+          preview.classList.add('hidden');
+        }
       }
     }
 
     function resetBumbuSelection() {
       const cbs = ['bumbuBalado', 'bumbuKeju', 'bumbuSapi', 'bumbuBarbeque'];
-      cbs.forEach(id => { if(document.getElementById(id)) document.getElementById(id).checked = false; });
-      document.getElementById('bumbuPreview').classList.add('hidden');
+      cbs.forEach(id => { 
+        const el = document.getElementById(id);
+        if(el) el.checked = false; 
+      });
+      const preview = document.getElementById('bumbuPreview');
+      if (preview) preview.classList.add('hidden');
     }
 
     function renderCart() {
       const list = document.getElementById('cartList');
       const summary = document.getElementById('cartSummary');
       
+      if (!list || !summary) return;
+
       if (cart.length === 0) {
         list.innerHTML = '<p class="text-gray-500 text-center py-8 text-sm">Keranjang kosong</p>';
         summary.classList.add('hidden');
@@ -1210,7 +1231,8 @@
       }).join('');
 
       const total = cart.reduce((sum, c) => sum + c.total, 0);
-      document.getElementById('cartTotal').textContent = `Rp ${total.toLocaleString()}`;
+      const totalEl = document.getElementById('cartTotal');
+      if (totalEl) totalEl.textContent = `Rp ${total.toLocaleString()}`;
       summary.classList.remove('hidden');
       updateBumbuSelection(); // Maintain selection
     }
@@ -1226,10 +1248,12 @@
     function updatePaymentDisplay() {
       const method = document.querySelector('input[name="payMethod"]:checked')?.value;
       const qrisSection = document.getElementById('qrisSection');
-      if (method === 'qris') {
-        qrisSection.classList.remove('hidden');
-      } else {
-        qrisSection.classList.add('hidden');
+      if (qrisSection) {
+        if (method === 'qris') {
+          qrisSection.classList.remove('hidden');
+        } else {
+          qrisSection.classList.add('hidden');
+        }
       }
     }
 
@@ -1280,19 +1304,21 @@
       }
 
       const selected = [];
-      const bumbuBaladoEl = document.getElementById('bumbuBalado');
-      const bumbuKejuEl = document.getElementById('bumbuKeju');
-      const bumbuSapiEl = document.getElementById('bumbuSapi');
-      const bumbuBarbequeEl = document.getElementById('bumbuBarbeque');
-      if (bumbuBaladoEl && bumbuBaladoEl.checked) selected.push('Balado');
-      if (bumbuKejuEl && bumbuKejuEl.checked) selected.push('Keju');
-      if (bumbuSapiEl && bumbuSapiEl.checked) selected.push('Sapi');
-      if (bumbuBarbequeEl && bumbuBarbequeEl.checked) selected.push('Barbeque');
+      const bumbuBalado = document.getElementById('bumbuBalado');
+      const bumbuKeju = document.getElementById('bumbuKeju');
+      const bumbuSapi = document.getElementById('bumbuSapi');
+      const bumbuBarbeque = document.getElementById('bumbuBarbeque');
+
+      if (bumbuBalado && bumbuBalado.checked) selected.push('Balado');
+      if (bumbuKeju && bumbuKeju.checked) selected.push('Keju');
+      if (bumbuSapi && bumbuSapi.checked) selected.push('Sapi');
+      if (bumbuBarbeque && bumbuBarbeque.checked) selected.push('Barbeque');
+
       const bumbuText = selected.length > 0 ? selected.join(', ') : 'Tanpa Bumbu';
       
-      const orderNotes = document.getElementById('orderNotes').value.trim();
+      const orderNotesEl = document.getElementById('orderNotes');
+      const orderNotes = orderNotesEl ? orderNotesEl.value.trim() : '';
       const orderDate = new Date().toISOString();
-      const tempId = Date.now(); 
 
       for (const item of cart) {
         const orderData = {
@@ -1318,8 +1344,11 @@
       renderMenu();
       const radios = document.getElementsByName('payMethod');
       radios.forEach(r => r.checked = false);
-      document.getElementById('qrisSection').classList.add('hidden');
-      document.getElementById('orderNotes').value = '';
+      
+      const qrisSection = document.getElementById('qrisSection');
+      if (qrisSection) qrisSection.classList.add('hidden');
+      
+      if (orderNotesEl) orderNotesEl.value = '';
       resetBumbuSelection();
       showBuyerTab('orders');
       showToast('Pesanan berhasil dibuat!');
@@ -1330,6 +1359,7 @@
       if (!currentBuyer) return;
       const orders = allData.filter(d => d.type === 'order' && d.username === currentBuyer.username && !d.hidden_by_buyer);
       const list = document.getElementById('buyerOrdersList');
+      if (!list) return;
 
       if (orders.length === 0) {
         list.innerHTML = '<p class="text-gray-500 text-center py-8 text-sm">Belum ada pesanan</p>';
@@ -1450,8 +1480,10 @@
       if (!currentBuyer) return;
       const notifs = allData.filter(d => d.type === 'notification' && d.username === currentBuyer.username);
       const badge = document.getElementById('notifBadge');
-      if (notifs.length > 0) { badge.textContent = notifs.length; badge.classList.remove('hidden'); } 
-      else { badge.classList.add('hidden'); }
+      if (badge) {
+        if (notifs.length > 0) { badge.textContent = notifs.length; badge.classList.remove('hidden'); } 
+        else { badge.classList.add('hidden'); }
+      }
     }
 
     // Ratings
@@ -1459,8 +1491,10 @@
       currentRating = (currentRating === stars) ? 0 : stars;
       for (let i = 1; i <= 5; i++) {
         const star = document.getElementById(`star${i}`);
-        if (i <= currentRating) { star.classList.add('text-yellow-400'); star.classList.remove('text-gray-300'); } 
-        else { star.classList.remove('text-yellow-400'); star.classList.add('text-gray-300'); }
+        if (star) {
+          if (i <= currentRating) { star.classList.add('text-yellow-400'); star.classList.remove('text-gray-300'); } 
+          else { star.classList.remove('text-yellow-400'); star.classList.add('text-gray-300'); }
+        }
       }
     }
 
@@ -1468,8 +1502,10 @@
       if (currentRating === 0) { showToast('Berikan rating terlebih dahulu', 'error'); return; }
       if (!currentBuyer) { showToast('Silakan login terlebih dahulu', 'error'); return; }
 
-      const review = document.getElementById('reviewText').value;
-      const isAnonymous = document.getElementById('anonOption').checked;
+      const reviewEl = document.getElementById('reviewText');
+      const review = reviewEl ? reviewEl.value : '';
+      const anonOption = document.getElementById('anonOption');
+      const isAnonymous = anonOption ? anonOption.checked : false;
       const reviewerName = isAnonymous ? 'Pembeli Anonim' : currentBuyer.username;
 
       if (editingRatingId) {
@@ -1488,7 +1524,8 @@
           showToast('Rating berhasil diupdate!');
         }
         editingRatingId = null;
-        document.getElementById('submitRatingBtn').textContent = 'Kirim Rating';
+        const submitBtn = document.getElementById('submitRatingBtn');
+        if (submitBtn) submitBtn.textContent = 'Kirim Rating';
       } else {
         const ratingData = {
           type: 'rating', 
@@ -1503,13 +1540,20 @@
         showToast('Rating berhasil dikirim!'); 
       }
 
-      currentRating = 0; document.getElementById('reviewText').value = ''; document.getElementById('namedOption').checked = true;
-      for (let i = 1; i <= 5; i++) { document.getElementById(`star${i}`).className = "cursor-pointer text-gray-300 hover:text-yellow-400 transition-all"; }
+      currentRating = 0; 
+      if (reviewEl) reviewEl.value = ''; 
+      const namedOption = document.getElementById('namedOption');
+      if (namedOption) namedOption.checked = true;
+      for (let i = 1; i <= 5; i++) { 
+        const star = document.getElementById(`star${i}`);
+        if (star) star.className = "cursor-pointer text-gray-300 hover:text-yellow-400 transition-all"; 
+      }
     }
 
     function renderRatings() {
       const ratings = allData.filter(d => d.type === 'rating').sort((a, b) => new Date(b.rating_date) - new Date(a.rating_date));
       const list = document.getElementById('ratingsList');
+      if (!list) return;
 
       if (ratings.length === 0) { list.innerHTML = '<p class="text-gray-500 text-center py-8 text-sm">Belum ada rating</p>'; return; }
 
@@ -1559,16 +1603,21 @@
       if(rating) {
         editingRatingId = identifier;
         setRating(rating.rating);
-        document.getElementById('reviewText').value = rating.review || '';
+        const reviewEl = document.getElementById('reviewText');
+        if (reviewEl) reviewEl.value = rating.review || '';
         
         if(rating.is_anonymous) {
-          document.getElementById('anonOption').checked = true;
+          const anonOption = document.getElementById('anonOption');
+          if (anonOption) anonOption.checked = true;
         } else {
-          document.getElementById('namedOption').checked = true;
+          const namedOption = document.getElementById('namedOption');
+          if (namedOption) namedOption.checked = true;
         }
         
-        document.getElementById('submitRatingBtn').textContent = 'Update Rating';
-        document.getElementById('ratingsContent').scrollIntoView({ behavior: 'smooth' });
+        const submitBtn = document.getElementById('submitRatingBtn');
+        if (submitBtn) submitBtn.textContent = 'Update Rating';
+        const ratingsContent = document.getElementById('ratingsContent');
+        if (ratingsContent) ratingsContent.scrollIntoView({ behavior: 'smooth' });
       }
     }
 
@@ -1589,6 +1638,7 @@
     function renderSellerOrders() {
       const orders = allData.filter(d => d.type === 'order' && !d.hidden_by_seller);
       const list = document.getElementById('sellerOrdersList');
+      if (!list) return;
 
       if (orders.length === 0) { list.innerHTML = '<p class="text-gray-500 text-center py-8 text-sm">Belum ada pesanan</p>'; return; }
 
@@ -1613,6 +1663,7 @@
         
         const catatanText = o1.catatan ? `<div class="mt-1.5 text-[9px] text-gray-700 bg-yellow-50/80 border border-yellow-200/50 px-1.5 py-1 rounded italic w-full">📝 Catatan: ${o1.catatan}</div>` : '';
 
+        // Tampilan kartu penjual direvisi lebih rapi dan ukuran sedang
         return `
           <div class="bg-white rounded-lg p-2.5 card-shadow mb-3 border border-gray-100 border-l-4 border-l-orange-500 relative">
             <div class="flex gap-1.5 mb-1.5 flex-wrap">
@@ -1694,8 +1745,10 @@
       currentNotifyGroup = allData.filter(d => d.type === 'order' && String(d.order_date) === String(dateIso));
       if (currentNotifyGroup.length === 0) { showToast('Data tidak ditemukan', 'error'); return; }
       
-      document.getElementById('notifyModal').classList.remove('hidden');
-      document.getElementById('notifyStatus').value = currentNotifyGroup[0].status || 'processing';
+      const notifyModal = document.getElementById('notifyModal');
+      if (notifyModal) notifyModal.classList.remove('hidden');
+      const notifyStatus = document.getElementById('notifyStatus');
+      if (notifyStatus) notifyStatus.value = currentNotifyGroup[0].status || 'processing';
       updateNotifyPreview();
     }
 
@@ -1715,7 +1768,8 @@
     function updateNotifyPreview() {
       if (currentNotifyGroup.length === 0) return;
       
-      const status = document.getElementById('notifyStatus').value;
+      const statusEl = document.getElementById('notifyStatus');
+      const status = statusEl ? statusEl.value : 'pending';
       const o1 = currentNotifyGroup[0];
       
       // Update struktur nota khusus WA persis seperti gambar contoh tanpa emoji
@@ -1739,18 +1793,21 @@
         footer = "Status: *MENUNGGU KONFIRMASI*\n\nPesanan Anda akan segera kami proses.";
       }
 
-      document.getElementById('notifyPreview').textContent = header + body + footer;
+      const previewEl = document.getElementById('notifyPreview');
+      if (previewEl) previewEl.textContent = header + body + footer;
     }
 
     function closeNotifyModal() {
-      document.getElementById('notifyModal').classList.add('hidden');
+      const notifyModal = document.getElementById('notifyModal');
+      if (notifyModal) notifyModal.classList.add('hidden');
       currentNotifyGroup = [];
     }
 
     async function sendNotificationWA() {
       if (currentNotifyGroup.length === 0) { showToast('Data tidak valid', 'error'); return; }
       
-      const status = document.getElementById('notifyStatus').value;
+      const statusEl = document.getElementById('notifyStatus');
+      const status = statusEl ? statusEl.value : 'pending';
       const o1 = currentNotifyGroup[0];
       
       for (const order of currentNotifyGroup) {
@@ -1767,7 +1824,8 @@
       if (phone.startsWith('0')) phone = '62' + phone.substring(1);
       
       // Kirim via link WhatsApp
-      const msg = document.getElementById('notifyPreview').textContent;
+      const previewEl = document.getElementById('notifyPreview');
+      const msg = previewEl ? previewEl.textContent : '';
       const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
       
       closeNotifyModal();
@@ -1779,6 +1837,7 @@
     function renderStockManagement() {
       loadStockData();
       const grid = document.getElementById('stockGrid');
+      if (!grid) return;
       
       grid.innerHTML = menuItems.map(item => {
         const stock = stocks[item.name] !== undefined ? stocks[item.name] : 0;
@@ -1799,11 +1858,11 @@
               </div>
             </div>
             <div class="flex items-center gap-1 sm:gap-2 mb-2">
-              <button type="button" onclick="adjustStock('${item.name}', -10)" class="w-8 h-8 sm:w-10 sm:h-10 bg-red-100 text-red-600 rounded-lg font-bold text-xs sm:text-sm hover:bg-red-200 transition-all">-10</button>
+              <button type="button" onclick="adjustStock('${item.name}', -10)" class="w-8 h-8 flex-shrink-0 sm:w-10 sm:h-10 bg-red-100 text-red-600 rounded-lg font-bold text-xs sm:text-sm hover:bg-red-200 transition-all">-10</button>
               <input type="number" id="stock-${cleanId(item.name)}" value="${stock}" 
-                class="flex-1 text-center text-base sm:text-lg font-bold border-2 border-gray-200 rounded-lg py-1 focus:border-orange-500 text-xs sm:text-sm px-1"
+                class="flex-1 w-full min-w-0 text-center text-base sm:text-lg font-bold border-2 border-gray-200 rounded-lg py-1 focus:border-orange-500 text-xs sm:text-sm px-1"
                 onchange="setStock('${item.name}', this.value)">
-              <button type="button" onclick="adjustStock('${item.name}', 10)" class="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 text-green-600 rounded-lg font-bold text-xs sm:text-sm hover:bg-green-200 transition-all">+10</button>
+              <button type="button" onclick="adjustStock('${item.name}', 10)" class="w-8 h-8 flex-shrink-0 sm:w-10 sm:h-10 bg-green-100 text-green-600 rounded-lg font-bold text-xs sm:text-sm hover:bg-green-200 transition-all">+10</button>
             </div>
             <button type="button" onclick="markStockEmpty('${item.name}')" class="w-full bg-red-500 text-white py-1.5 sm:py-2 rounded-lg font-semibold hover:bg-red-600 transition-all text-xs sm:text-sm">
               🚨 Stok Habis
@@ -1815,7 +1874,8 @@
 
     async function adjustStock(name, amount) {
       stocks[name] = Math.max(0, (stocks[name] || 0) + amount);
-      document.getElementById(`stock-${cleanId(name)}`).value = stocks[name];
+      const stockEl = document.getElementById(`stock-${cleanId(name)}`);
+      if (stockEl) stockEl.value = stocks[name];
       await saveStockData(); checkLowStock();
     }
 
@@ -1826,7 +1886,8 @@
 
     async function markStockEmpty(name) {
       stocks[name] = 0;
-      document.getElementById(`stock-${cleanId(name)}`).value = 0;
+      const stockEl = document.getElementById(`stock-${cleanId(name)}`);
+      if (stockEl) stockEl.value = 0;
       await saveStockData(); showToast(`✅ ${name} ditandai HABIS`); checkLowStock();
     }
 
@@ -1867,8 +1928,12 @@
       const pendingOrders = allData.filter(d => d.type === 'order' && d.status === 'pending');
       if (pendingOrders.length > 0) notifications.push({ type: 'info', message: `📦 ${pendingOrders.length} pesanan baru!`, icon: '📦' });
 
-      if (notifications.length > 0) { badge.textContent = notifications.length; badge.classList.remove('hidden'); } 
-      else { badge.classList.add('hidden'); }
+      if (badge) {
+        if (notifications.length > 0) { badge.textContent = notifications.length; badge.classList.remove('hidden'); } 
+        else { badge.classList.add('hidden'); }
+      }
+
+      if (!list) return;
 
       if (notifications.length === 0) { list.innerHTML = '<p class="text-gray-500 text-center py-8">Tidak ada notifikasi</p>'; return; }
 
@@ -1882,7 +1947,8 @@
     // Recap Functions
     function updateRecap() {
       const today = new Date();
-      document.getElementById('todayDate').textContent = today.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      const todayDateEl = document.getElementById('todayDate');
+      if (todayDateEl) todayDateEl.textContent = today.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
       const todayOrders = allData.filter(d => d.type === 'order' && d.status === 'completed' && new Date(d.order_date).toDateString() === today.toDateString());
       
@@ -1903,43 +1969,56 @@
       }
       let popular = popularItems.length > 0 ? popularItems.join(', ') : '-';
 
-      document.getElementById('todayOrders').textContent = uniqueOrdersCount;
-      document.getElementById('todaySales').textContent = `Rp ${todayOrders.reduce((sum, o) => sum + (o.total_price || 0), 0).toLocaleString()}`;
-      document.getElementById('todayItems').textContent = todayOrders.reduce((sum, o) => sum + (o.quantity || 0), 0);
+      const todayOrdersEl = document.getElementById('todayOrders');
+      if (todayOrdersEl) todayOrdersEl.textContent = uniqueOrdersCount;
+
+      const todaySalesEl = document.getElementById('todaySales');
+      if (todaySalesEl) todaySalesEl.textContent = `Rp ${todayOrders.reduce((sum, o) => sum + (o.total_price || 0), 0).toLocaleString()}`;
+
+      const todayItemsEl = document.getElementById('todayItems');
+      if (todayItemsEl) todayItemsEl.textContent = todayOrders.reduce((sum, o) => sum + (o.quantity || 0), 0);
       
       const popularEl = document.getElementById('popularItem');
-      popularEl.textContent = popular;
-      // Menyesuaikan ukuran font jika ada lebih dari 1 item yang seri agar tidak meluber
-      if (popularItems.length > 1) {
-        popularEl.className = "text-xs sm:text-sm font-bold text-purple-600 line-clamp-2";
-      } else {
-        popularEl.className = "text-xl font-bold text-purple-600 truncate";
+      if (popularEl) {
+        popularEl.textContent = popular;
+        // Menyesuaikan ukuran font jika ada lebih dari 1 item yang seri agar tidak meluber
+        if (popularItems.length > 1) {
+          popularEl.className = "text-xs sm:text-sm font-bold text-purple-600 line-clamp-2";
+        } else {
+          popularEl.className = "text-xl font-bold text-purple-600 truncate";
+        }
       }
 
       const maxVariantCount = Math.max(...Object.values(variantCounts), 1);
-      document.getElementById('salesChart').innerHTML = menuItems.map(item => {
-        const count = variantCounts[item.name] || 0;
-        const percentage = (count / maxVariantCount) * 100;
-        return `
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-md overflow-hidden bg-gray-100 flex-shrink-0"><img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover"></div>
-            <div class="flex-1"><div class="flex justify-between text-sm mb-1"><span>${item.name}</span><span class="font-bold">${count}</span></div><div class="h-4 bg-gray-200 rounded-full overflow-hidden"><div class="h-full gradient-bg transition-all duration-500" style="width: ${percentage}%"></div></div></div>
-          </div>
-        `;
-      }).join('');
-
-      document.getElementById('variantDetails').innerHTML = menuItems.map(item => {
-        const count = variantCounts[item.name] || 0;
-        return `
-          <div class="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+      const salesChart = document.getElementById('salesChart');
+      if (salesChart) {
+        salesChart.innerHTML = menuItems.map(item => {
+          const count = variantCounts[item.name] || 0;
+          const percentage = (count / maxVariantCount) * 100;
+          return `
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-md overflow-hidden bg-gray-100"><img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover"></div>
-              <span class="font-medium">${item.name}</span>
+              <div class="w-8 h-8 rounded-md overflow-hidden bg-gray-100 flex-shrink-0"><img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover"></div>
+              <div class="flex-1"><div class="flex justify-between text-sm mb-1"><span>${item.name}</span><span class="font-bold">${count}</span></div><div class="h-4 bg-gray-200 rounded-full overflow-hidden"><div class="h-full gradient-bg transition-all duration-500" style="width: ${percentage}%"></div></div></div>
             </div>
-            <div class="text-right"><div class="font-bold">${count} terjual</div><div class="text-sm text-gray-500">Rp ${(count * item.price).toLocaleString()}</div></div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
+      }
+
+      const variantDetails = document.getElementById('variantDetails');
+      if (variantDetails) {
+        variantDetails.innerHTML = menuItems.map(item => {
+          const count = variantCounts[item.name] || 0;
+          return `
+            <div class="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-md overflow-hidden bg-gray-100"><img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover"></div>
+                <span class="font-medium">${item.name}</span>
+              </div>
+              <div class="text-right"><div class="font-bold">${count} terjual</div><div class="text-sm text-gray-500">Rp ${(count * item.price).toLocaleString()}</div></div>
+            </div>
+          `;
+        }).join('');
+      }
 
       renderRecapHistory();
     }
@@ -1961,6 +2040,7 @@
     function renderRecapHistory() {
       const recaps = allData.filter(d => d.type === 'recap').sort((a, b) => new Date(b.date) - new Date(a.date));
       const container = document.getElementById('recapHistory');
+      if (!container) return;
 
       if (recaps.length === 0) { container.innerHTML = '<p class="text-gray-500 text-sm">Belum ada riwayat rekap</p>'; return; }
 
@@ -2045,6 +2125,7 @@
     function renderSellerRatings() {
       const ratings = allData.filter(d => d.type === 'rating').sort((a, b) => new Date(b.rating_date) - new Date(a.rating_date));
       const list = document.getElementById('sellerRatingsList');
+      if (!list) return;
 
       if (ratings.length === 0) { 
         list.innerHTML = '<p class="text-gray-500 text-center py-8 text-sm">Belum ada ulasan</p>'; 
@@ -2107,13 +2188,17 @@
     function updateAllViews() {
       loadStockData();
       if (currentBuyer) {
-        if(document.querySelector('#tabMenu') && document.querySelector('#tabMenu').classList.contains('border-b-2')) checkStockUpdates();
+        const menuTab = document.querySelector('#tabMenu');
+        if(menuTab && menuTab.classList.contains('border-b-2')) checkStockUpdates();
         renderCart(); updateBuyerOrders(); updateBuyerNotifications(); renderRatings();
       }
-      if (!document.getElementById('sellerDashboard').classList.contains('hidden')) {
+      const sellerDash = document.getElementById('sellerDashboard');
+      if (sellerDash && !sellerDash.classList.contains('hidden')) {
         renderSellerOrders(); renderStockManagement(); updateSellerNotifications();
-        if(document.querySelector('#sellerTabRecap') && document.querySelector('#sellerTabRecap').classList.contains('border-b-2')) updateRecap();
-        if(document.querySelector('#sellerTabRatings') && document.querySelector('#sellerTabRatings').classList.contains('border-b-2')) renderSellerRatings();
+        const sellerRecap = document.querySelector('#sellerTabRecap');
+        if(sellerRecap && sellerRecap.classList.contains('border-b-2')) updateRecap();
+        const sellerRatings = document.querySelector('#sellerTabRatings');
+        if(sellerRatings && sellerRatings.classList.contains('border-b-2')) renderSellerRatings();
       }
     }
 
