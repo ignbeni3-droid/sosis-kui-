@@ -780,8 +780,8 @@
     // ============================================================
     // SUPABASE CONFIG
     // ============================================================
-    const SUPABASE_URL  = "https://drmiiqmnilvvnzgrvazc.supabase.co";
-    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRybWlpcW1uaWx2dm56Z3J2YXpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMjYxNjQsImV4cCI6MjA5NTYwMjE2NH0.oKx0JyjtOrtJOYd1l2LclAT9F6VKRWQewTGpfjDh4tQ";
+    const SUPABASE_URL  = "https://tksdtsedhhsrnhbgfgtm.supabase.co";
+    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRrc2R0c2VkaGhzcm5oYmdmZ3RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyOTg1MDQsImV4cCI6MjA4OTg3NDUwNH0.aE-5Uh61V7EVHLfsbBCeEI6yxJebMJTvV18dHjnS1NA";
     const TABLE = "sosis_kui_data";
 
     let supabase = null;
