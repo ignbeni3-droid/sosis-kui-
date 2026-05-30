@@ -681,6 +681,7 @@
   </div>
 
   <script>
+    let isSaving = false;
     let allData = [];
     let currentBuyer = null;
     let savedBuyers = JSON.parse(localStorage.getItem('savedBuyers')) || [];
@@ -874,16 +875,18 @@
     }
 
     async function loadAllData() {
+        if (isSaving) return;
         try {
             const rows = await sbFetch(`${TABLE}?select=id,data&limit=5000`);
+            if (isSaving) return;
             allData = rows.map(r => ({ ...r.data, id: r.id, __backendId: r.id }));
         } catch(e) {
             console.error("Gagal memuat data:", e);
-            allData = [];
         }
     }
 
     async function saveDataDoc(dataObj) {
+        isSaving = true;
         if (!dataObj.id && dataObj.__backendId) dataObj.id = dataObj.__backendId;
         if (!dataObj.id) {
             dataObj.id = crypto.randomUUID();
@@ -895,7 +898,6 @@
         if (idx > -1) allData[idx] = { ...dataObj };
         else allData.push({ ...dataObj });
         debouncedUpdateAllViews();
-
         try {
             await sbFetch(`${TABLE}?id=eq.${encodeURIComponent(id)}`, {
                 method: 'DELETE'
@@ -906,6 +908,8 @@
             });
         } catch(e) {
             console.error("Gagal simpan data:", e);
+        } finally {
+            setTimeout(() => { isSaving = false; }, 800);
         }
     }
 
