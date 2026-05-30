@@ -699,6 +699,8 @@
       'Cireng (Isi 4pcs)': 50,
       'Cireng Isi Ayam (Isi 5)': 50,
       'Cireng Isi Keju (Isi 5)': 50,
+      'Cireng Isi Ayam (1pcs)': 50,
+      'Cireng Isi Keju (1pcs)': 50,
       'Scallop': 50,
       'Sosis Mie': 50,
       'Nugget Love': 50,
@@ -712,6 +714,8 @@
       { name: 'Cireng (Isi 4pcs)', price: 1000, emoji: '🍲', image: 'https://github.com/ignbeni3-droid/ben/blob/main/cireng%202.jpeg?raw=true', desc: 'Lezat' },
       { name: 'Cireng Isi Ayam (Isi 5)', price: 10000, emoji: '🥟', image: 'https://github.com/ignbeni3-droid/ben/blob/main/cireng%20isi%20.jpeg?raw=true', desc: 'Ayam Pedas' },
       { name: 'Cireng Isi Keju (Isi 5)', price: 10000, emoji: '🧀', image: 'https://github.com/ignbeni3-droid/ben/blob/main/cireng%20isi%20.jpeg?raw=true', desc: 'Lumer' },
+      { name: 'Cireng Isi Ayam (1pcs)', price: 2000, emoji: '🥟', image: 'https://github.com/ignbeni3-droid/ben/blob/main/cireng%20isi%20.jpeg?raw=true', desc: 'Ayam Pedas (Satuan)' },
+      { name: 'Cireng Isi Keju (1pcs)', price: 2000, emoji: '🧀', image: 'https://github.com/ignbeni3-droid/ben/blob/main/cireng%20isi%20.jpeg?raw=true', desc: 'Lumer (Satuan)' },
       { name: 'Sosis', price: 1000, emoji: '🌭', image: 'https://github.com/ignbeni3-droid/ben/blob/main/sosis%202.jpeg?raw=true', desc: 'Premium' },
       { name: 'Scallop', price: 1000, emoji: '🦪', image: 'https://github.com/ignbeni3-droid/ben/blob/main/scallop%202.jpeg?raw=true', desc: 'Premium' },
       { name: 'Sosis Mie', price: 1000, emoji: '🍝', image: 'https://github.com/ignbeni3-droid/ben/blob/main/sosis%20mie%202.jpeg?raw=true', desc: 'Nikmat' },
@@ -1015,6 +1019,8 @@
         stocks['Cireng (Isi 4pcs)'] = stockData.stock_cireng !== undefined ? stockData.stock_cireng : 50;
         stocks['Cireng Isi Ayam (Isi 5)'] = stockData.stock_cireng_ayam !== undefined ? stockData.stock_cireng_ayam : 50;
         stocks['Cireng Isi Keju (Isi 5)'] = stockData.stock_cireng_keju !== undefined ? stockData.stock_cireng_keju : 50;
+        stocks['Cireng Isi Ayam (1pcs)'] = stockData.stock_cireng_ayam_1 !== undefined ? stockData.stock_cireng_ayam_1 : 50;
+        stocks['Cireng Isi Keju (1pcs)'] = stockData.stock_cireng_keju_1 !== undefined ? stockData.stock_cireng_keju_1 : 50;
         stocks['Scallop'] = stockData.stock_scallop !== undefined ? stockData.stock_scallop : 50;
         stocks['Sosis Mie'] = stockData.stock_sosis_mie !== undefined ? stockData.stock_sosis_mie : 50;
         stocks['Nugget Love'] = stockData.stock_nugget_love !== undefined ? stockData.stock_nugget_love : 50;
@@ -2482,6 +2488,8 @@
       stockData.stock_cireng = stocks['Cireng (Isi 4pcs)'];
       stockData.stock_cireng_ayam = stocks['Cireng Isi Ayam (Isi 5)'];
       stockData.stock_cireng_keju = stocks['Cireng Isi Keju (Isi 5)'];
+      stockData.stock_cireng_ayam_1 = stocks['Cireng Isi Ayam (1pcs)'];
+      stockData.stock_cireng_keju_1 = stocks['Cireng Isi Keju (1pcs)'];
       stockData.stock_scallop = stocks['Scallop'];
       stockData.stock_sosis_mie = stocks['Sosis Mie'];
       stockData.stock_nugget_love = stocks['Nugget Love'];
