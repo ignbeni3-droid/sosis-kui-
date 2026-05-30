@@ -3143,12 +3143,7 @@
       const list = document.getElementById('sellerRatingsList');
       if (!list) return;
 
-      if (ratings.length === 0) { 
-        list.innerHTML = '<p class="text-gray-500 text-center py-8 text-sm">Belum ada ulasan</p>'; 
-        return; 
-      }
-
-      const avgRating = (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1);
+      const avgRating = ratings.length > 0 ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1) : "0.0";
 
       let html = `
         <div class="bg-white rounded-xl p-4 card-shadow mb-4 flex items-center justify-between border border-gray-100">
@@ -3166,23 +3161,27 @@
         </div>
       `;
 
-      html += ratings.map(r => {
-        const itemId = r.id || r.__backendId || r.rating_date;
-        return `
-        <div class="bg-white rounded-xl p-4 card-shadow mb-3 border border-gray-50 relative">
-          <div class="flex items-start justify-between mb-2">
-            <div>
-              <div class="font-bold text-gray-800 text-sm mb-0.5">${r.is_anonymous ? '👤 Pembeli Anonim' : r.reviewer_name}</div>
-              <div class="flex gap-0.5 text-sm">${[1,2,3,4,5].map(i => `<span class="${i <= r.rating ? 'text-yellow-400' : 'text-gray-300'}">★</span>`).join('')}</div>
+if (ratings.length === 0) {
+        html += '<p class="text-gray-500 text-center py-8 text-sm">Belum ada ulasan</p>';
+      } else {
+        html += ratings.map(r => {
+          const itemId = r.id || r.__backendId || r.rating_date;
+          return `
+          <div class="bg-white rounded-xl p-4 card-shadow mb-3 border border-gray-50 relative">
+            <div class="flex items-start justify-between mb-2">
+              <div>
+                <div class="font-bold text-gray-800 text-sm mb-0.5">${r.is_anonymous ? '👤 Pembeli Anonim' : r.reviewer_name}</div>
+                <div class="flex gap-0.5 text-sm">${[1,2,3,4,5].map(i => `<span class="${i <= r.rating ? 'text-yellow-400' : 'text-gray-300'}">★</span>`).join('')}</div>
+              </div>
+              <button onclick="deleteRating('${itemId}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors flex items-center justify-center border border-transparent hover:border-red-100" title="Hapus Ulasan">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              </button>
             </div>
-            <button onclick="deleteRating('${itemId}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors flex items-center justify-center border border-transparent hover:border-red-100" title="Hapus Ulasan">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-            </button>
+            <div class="text-[10px] text-gray-400 mb-2 font-medium">${new Date(r.rating_date).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'})}</div>
+            ${r.review ? `<p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded border border-gray-100 italic shadow-inner">"${r.review}"</p>` : ''}
           </div>
-          <div class="text-[10px] text-gray-400 mb-2 font-medium">${new Date(r.rating_date).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'})}</div>
-          ${r.review ? `<p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded border border-gray-100 italic shadow-inner">"${r.review}"</p>` : ''}
-        </div>
-      `}).join('');
+        `}).join('');
+      }
 
       list.innerHTML = html;
     }
