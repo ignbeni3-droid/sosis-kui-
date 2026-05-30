@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full">
+<html lang="id">
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -27,11 +27,22 @@
     input[type=number]::-webkit-inner-spin-button, 
     input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     input[type=number] { -moz-appearance: textfield; }
+
+    .line-chart-container { position: relative; width: 100%; height: 180px; }
+    .line-chart-container canvas { width: 100% !important; height: 100% !important; }
+    /* Rating Popup */
+    .rating-popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 200; }
+    .rating-popup { background: white; border-radius: 1.25rem; padding: 1.5rem; max-width: 300px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: popupIn 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes popupIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .star-btn { font-size: 1.6rem; cursor: pointer; color: #d1d5db; transition: color 0.15s, transform 0.15s; border: none; background: none; padding: 2px; }
+    .star-btn.active { color: #facc15; transform: scale(1.15); }
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js" type="text/javascript"></script>
- </head>
- <body class="h-full bg-gradient-to-br from-orange-50 to-red-50 flex flex-col overflow-x-hidden">
-  <div id="app" class="h-full w-full max-w-[100vw] overflow-y-auto overflow-x-hidden relative flex flex-col">
+   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+ <body class="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex flex-col overflow-x-hidden text-gray-800">
+  <div id="app" class="flex-1 w-full max-w-[100vw] relative flex flex-col">
    
    <div id="loadingScreen" class="fixed inset-0 gradient-bg flex items-center justify-center z-50 transition-opacity duration-300">
     <div class="text-center text-white">
@@ -64,7 +75,7 @@
    </div>
 
    <!-- Home Page -->
-   <div id="homePage" class="hidden min-h-full flex flex-col items-center justify-center p-4">
+   <div id="homePage" class="hidden flex-1 flex-col items-center justify-center p-4">
     <div class="bg-white rounded-3xl card-shadow p-5 max-w-[280px] w-full text-center">
      <img src="https://github.com/ignbeni3-droid/ben/blob/main/Sosis_KUI-removebg.png?raw=true" alt="Sosis KUI" class="w-20 h-20 mx-auto mb-3" onerror="this.style.background='linear-gradient(135deg, #dc2626, #f97316)'; this.style.borderRadius='50%';">
      <h1 class="text-xl font-bold gradient-text mb-1">Sosis KUI</h1>
@@ -87,11 +98,11 @@
       <p class="text-[10px] text-gray-400 mb-1 mt-2">Hubungi Kami:</p>
       <div class="flex justify-center items-center gap-4 mb-5">
        <a href="https://wa.me/6285102203195" target="_blank" class="text-[13px] font-medium text-[#25D366] hover:text-green-600 flex items-center gap-1.5 transition-colors">
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.74.45 3.37 1.22 4.8L2 22l5.35-1.18C8.75 21.57 10.33 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm3.83 14.56c-.2.56-1.15 1.07-1.6 1.13-.43.05-1.02.14-2.88-.63-2.23-1.04-3.66-3.32-3.77-3.48-.11-.15-.9-1.2-.9-2.28 0-1.1.56-1.63.76-1.85.2-.21.44-.27.58-.27.15 0 .3.01.43.01.17.01.39-.06.57.34.18.43.62 1.54.67 1.65.06.11.09.24.01.38-.08.15-.12.24-.23.36-.11.12-.24.27-.33.37-.1.1-.21.21-.09.43.12.21.54.9 1.16 1.45.8.71 1.48.93 1.69 1.04.21.11.33.09.45-.05.13-.15.56-.65.71-.87.15-.22.3-.18.5-.11.2.07 1.25.59 1.46.7.21.11.35.16.4.25.05.09.05.51-.15 1.07z"/></svg>
         Benjiro 
        </a> 
        <a href="https://wa.me/6281387658835" target="_blank" class="text-[13px] font-medium text-[#25D366] hover:text-green-600 flex items-center gap-1.5 transition-colors">
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.74.45 3.37 1.22 4.8L2 22l5.35-1.18C8.75 21.57 10.33 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm3.83 14.56c-.2.56-1.15 1.07-1.6 1.13-.43.05-1.02.14-2.88-.63-2.23-1.04-3.66-3.32-3.77-3.48-.11-.15-.9-1.2-.9-2.28 0-1.1.56-1.63.76-1.85.2-.21.44-.27.58-.27.15 0 .3.01.43.01.17.01.39-.06.57.34.18.43.62 1.54.67 1.65.06.11.09.24.01.38-.08.15-.12.24-.23.36-.11.12-.24.27-.33.37-.1.1-.21.21-.09.43.12.21.54.9 1.16 1.45.8.71 1.48.93 1.69 1.04.21.11.33.09.45-.05.13-.15.56-.65.71-.87.15-.22.3-.18.5-.11.2.07 1.25.59 1.46.7.21.11.35.16.4.25.05.09.05.51-.15 1.07z"/></svg>
         Echa 
        </a>
       </div>
@@ -101,7 +112,7 @@
    </div>
 
    <!-- Buyer Login Page -->
-   <div id="buyerLogin" class="hidden min-h-full flex flex-col items-center justify-center p-4">
+   <div id="buyerLogin" class="hidden flex-1 flex-col items-center justify-center p-4">
     <div class="bg-white rounded-3xl card-shadow p-5 max-w-[280px] w-full">
      <button onclick="showPage('homePage')" class="text-gray-500 hover:text-gray-700 mb-3 flex items-center gap-1 text-xs">
       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg> Kembali 
@@ -130,7 +141,7 @@
    </div>
 
    <!-- Seller Login Page -->
-   <div id="sellerLogin" class="hidden min-h-full flex flex-col items-center justify-center p-4">
+   <div id="sellerLogin" class="hidden flex-1 flex-col items-center justify-center p-4">
     <div class="bg-white rounded-3xl card-shadow p-5 max-w-[280px] w-full">
      <button onclick="showPage('homePage')" class="text-gray-500 hover:text-gray-700 mb-3 flex items-center gap-1 text-xs">
       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg> Kembali 
@@ -154,40 +165,42 @@
    </div>
 
    <!-- Buyer Dashboard -->
-   <div id="buyerDashboard" class="hidden min-h-full flex-col pb-24 relative flex-1">
-    <header class="gradient-bg text-white p-4 sticky top-0 z-30 shadow-md">
-     <div class="flex items-center justify-between max-w-4xl mx-auto">
-      <div class="flex items-center gap-3">
-       <img src="https://github.com/ignbeni3-droid/ben/blob/main/Sosis_KUI-removebg.png?raw=true" alt="Logo" class="w-10 h-10" onerror="this.style.display='none'">
-       <div>
-        <h1 class="font-bold text-lg">Sosis KUI</h1>
-        <p class="text-xs opacity-80" id="buyerWelcome">Selamat datang!</p>
+   <div id="buyerDashboard" class="hidden flex-1 flex-col relative">
+    <div class="sticky top-0 z-40 w-full shadow-md flex flex-col">
+     <header class="gradient-bg text-white p-4 relative z-20">
+      <div class="flex items-center justify-between max-w-4xl mx-auto">
+       <div class="flex items-center gap-3">
+        <img src="https://github.com/ignbeni3-droid/ben/blob/main/Sosis_KUI-removebg.png?raw=true" alt="Logo" class="w-10 h-10" onerror="this.style.display='none'">
+        <div>
+         <h1 class="font-bold text-lg">Sosis KUI</h1>
+         <p class="text-xs opacity-80" id="buyerWelcome">Selamat datang!</p>
+        </div>
+       </div>
+       <div class="flex items-center gap-3">
+        <button onclick="showBuyerTab('notifications')" class="relative p-2 hover:bg-white/20 rounded-full transition-all">
+         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+         <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-yellow-400 text-red-600 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center notification-badge">0</span> 
+        </button> 
+        <button onclick="logoutBuyer()" class="p-2 hover:bg-white/20 rounded-full transition-all" title="Logout">
+         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+        </button>
        </div>
       </div>
-      <div class="flex items-center gap-3">
-       <button onclick="showBuyerTab('notifications')" class="relative p-2 hover:bg-white/20 rounded-full transition-all">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-        <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-yellow-400 text-red-600 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center notification-badge">0</span> 
+     </header>
+
+     <nav class="bg-white w-full max-w-[100vw] overflow-x-auto hide-scrollbar relative z-10 border-b border-gray-100">
+      <div class="flex max-w-4xl mx-auto min-w-max">
+       <button onclick="showBuyerTab('menu')" id="tabMenu" class="flex-1 py-3 px-4 text-center font-medium text-orange-600 border-b-2 border-orange-500 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">Menu</button> 
+       <button onclick="showBuyerTab('orders')" id="tabOrders" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">Pesanan</button> 
+       <button onclick="showBuyerTab('cart')" id="tabCart" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap min-w-[80px] relative text-[13px] sm:text-sm">
+         Keranjang <span id="cartBadgeTab" class="hidden bg-orange-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full absolute top-1.5 right-1">0</span>
        </button> 
-       <button onclick="logoutBuyer()" class="p-2 hover:bg-white/20 rounded-full transition-all" title="Logout">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-       </button>
+       <button onclick="showBuyerTab('ratings')" id="tabRatings" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">Rating</button>
       </div>
-     </div>
-    </header>
+     </nav>
+    </div>
 
-    <nav class="bg-white shadow-sm sticky top-[72px] z-20 w-full max-w-[100vw] overflow-x-auto hide-scrollbar">
-     <div class="flex max-w-4xl mx-auto min-w-max">
-      <button onclick="showBuyerTab('menu')" id="tabMenu" class="flex-1 py-3 px-4 text-center font-medium text-orange-600 border-b-2 border-orange-500 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">Menu</button> 
-      <button onclick="showBuyerTab('orders')" id="tabOrders" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">Pesanan</button> 
-      <button onclick="showBuyerTab('cart')" id="tabCart" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap min-w-[80px] relative text-[13px] sm:text-sm">
-        Keranjang <span id="cartBadgeTab" class="hidden bg-orange-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full absolute top-1.5 right-1">0</span>
-      </button> 
-      <button onclick="showBuyerTab('ratings')" id="tabRatings" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">Rating</button>
-     </div>
-    </nav>
-
-    <main class="flex-1 p-4 max-w-4xl mx-auto w-full">
+    <main class="flex-1 p-4 pb-24 max-w-4xl mx-auto w-full">
      <div id="menuContent" class="space-y-4">
       <div class="flex items-center gap-2 mb-2">
         <div class="bg-orange-100 text-orange-600 p-1.5 rounded-md"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg></div>
@@ -298,7 +311,7 @@
      </div>
     </main>
 
-    <footer class="bg-transparent py-6 text-center pb-6 mt-auto border-t border-gray-100">
+    <footer class="bg-transparent py-6 text-center mt-auto border-t border-gray-100">
       <p class="text-[10px] text-gray-400 font-bold mb-3 tracking-widest uppercase">DIDUKUNG OLEH:</p>
       <div class="flex justify-center gap-4 mb-5">
        <div class="bg-white p-1.5 rounded-full w-12 h-12 flex items-center justify-center shadow-sm border border-gray-100"><img src="https://github.com/ignbeni3-droid/ben/blob/main/istts-removebg-preview.png?raw=true" alt="ISTTS" class="w-full h-full object-contain" onerror="this.style.display='none'"></div>
@@ -307,11 +320,11 @@
       <p class="text-[10px] text-gray-400 mb-1 mt-2">Hubungi Kami:</p>
       <div class="flex justify-center items-center gap-4 mb-5">
        <a href="https://wa.me/6285102203195" target="_blank" class="text-[13px] font-medium text-[#25D366] hover:text-green-600 flex items-center gap-1.5 transition-colors">
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.74.45 3.37 1.22 4.8L2 22l5.35-1.18C8.75 21.57 10.33 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm3.83 14.56c-.2.56-1.15 1.07-1.6 1.13-.43.05-1.02.14-2.88-.63-2.23-1.04-3.66-3.32-3.77-3.48-.11-.15-.9-1.2-.9-2.28 0-1.1.56-1.63.76-1.85.2-.21.44-.27.58-.27.15 0 .3.01.43.01.17.01.39-.06.57.34.18.43.62 1.54.67 1.65.06.11.09.24.01.38-.08.15-.12.24-.23.36-.11.12-.24.27-.33.37-.1.1-.21.21-.09.43.12.21.54.9 1.16 1.45.8.71 1.48.93 1.69 1.04.21.11.33.09.45-.05.13-.15.56-.65.71-.87.15-.22.3-.18.5-.11.2.07 1.25.59 1.46.7.21.11.35.16.4.25.05.09.05.51-.15 1.07z"/></svg>
         Benjiro 
        </a> 
        <a href="https://wa.me/6281387658835" target="_blank" class="text-[13px] font-medium text-[#25D366] hover:text-green-600 flex items-center gap-1.5 transition-colors">
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.74.45 3.37 1.22 4.8L2 22l5.35-1.18C8.75 21.57 10.33 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm3.83 14.56c-.2.56-1.15 1.07-1.6 1.13-.43.05-1.02.14-2.88-.63-2.23-1.04-3.66-3.32-3.77-3.48-.11-.15-.9-1.2-.9-2.28 0-1.1.56-1.63.76-1.85.2-.21.44-.27.58-.27.15 0 .3.01.43.01.17.01.39-.06.57.34.18.43.62 1.54.67 1.65.06.11.09.24.01.38-.08.15-.12.24-.23.36-.11.12-.24.27-.33.37-.1.1-.21.21-.09.43.12.21.54.9 1.16 1.45.8.71 1.48.93 1.69 1.04.21.11.33.09.45-.05.13-.15.56-.65.71-.87.15-.22.3-.18.5-.11.2.07 1.25.59 1.46.7.21.11.35.16.4.25.05.09.05.51-.15 1.07z"/></svg>
         Echa 
        </a>
       </div>
@@ -333,39 +346,41 @@
    </div>
 
    <!-- Seller Dashboard -->
-   <div id="sellerDashboard" class="hidden min-h-full flex-col flex-1">
-    <header class="bg-gray-800 text-white p-4 sticky top-0 z-30">
-     <div class="flex items-center justify-between max-w-6xl mx-auto">
-      <div class="flex items-center gap-3">
-       <img src="https://github.com/ignbeni3-droid/ben/blob/main/Sosis_KUI-removebg.png?raw=true" alt="Logo" class="w-10 h-10" onerror="this.style.display='none'">
-       <div>
-        <h1 class="font-bold text-lg">Portal Penjual</h1>
-        <p class="text-xs opacity-80">Sosis KUI</p>
+   <div id="sellerDashboard" class="hidden flex-col relative flex-1">
+    <div class="sticky top-0 z-40 w-full shadow-md flex flex-col">
+     <header class="bg-gray-800 text-white p-4 relative z-20">
+      <div class="flex items-center justify-between max-w-6xl mx-auto">
+       <div class="flex items-center gap-3">
+        <img src="https://github.com/ignbeni3-droid/ben/blob/main/Sosis_KUI-removebg.png?raw=true" alt="Logo" class="w-10 h-10" onerror="this.style.display='none'">
+        <div>
+         <h1 class="font-bold text-lg">Portal Penjual</h1>
+         <p class="text-xs opacity-80">Sosis KUI</p>
+        </div>
+       </div>
+       <div class="flex items-center gap-3">
+        <button onclick="showSellerTab('notifications')" class="relative p-2 hover:bg-white/20 rounded-full transition-all">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+         <span id="sellerNotifBadge" class="hidden absolute -top-1 -right-1 bg-yellow-400 text-gray-800 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center notification-badge">0</span> 
+        </button> 
+        <button onclick="logoutSeller()" class="p-2 hover:bg-white/20 rounded-full transition-all" title="Logout">
+         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+        </button>
        </div>
       </div>
-      <div class="flex items-center gap-3">
-       <button onclick="showSellerTab('notifications')" class="relative p-2 hover:bg-white/20 rounded-full transition-all">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-        <span id="sellerNotifBadge" class="hidden absolute -top-1 -right-1 bg-yellow-400 text-gray-800 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center notification-badge">0</span> 
-       </button> 
-       <button onclick="logoutSeller()" class="p-2 hover:bg-white/20 rounded-full transition-all" title="Logout">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-       </button>
+     </header>
+     
+     <nav class="bg-white w-full max-w-[100vw] overflow-x-auto hide-scrollbar relative z-10 border-b border-gray-200">
+      <div class="flex max-w-6xl mx-auto min-w-max">
+       <button onclick="showSellerTab('orders')" id="sellerTabOrders" class="flex-1 py-3 px-4 text-center font-medium text-orange-600 border-b-2 border-orange-500 transition-all whitespace-nowrap text-[13px] sm:text-sm">Pesanan</button> 
+       <button onclick="showSellerTab('stock')" id="sellerTabStock" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap text-[13px] sm:text-sm">Stok</button> 
+       <button onclick="showSellerTab('recap')" id="sellerTabRecap" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap text-[13px] sm:text-sm">Rekap</button> 
+       <button onclick="showSellerTab('ratings')" id="sellerTabRatings" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap text-[13px] sm:text-sm">Ulasan</button>
+       <button onclick="showSellerTab('notifications')" id="sellerTabNotif" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap text-[13px] sm:text-sm">Notifikasi</button>
       </div>
-     </div>
-    </header>
+     </nav>
+    </div>
     
-    <nav class="bg-white shadow-sm sticky top-[72px] z-20 w-full max-w-[100vw] overflow-x-auto hide-scrollbar">
-     <div class="flex max-w-6xl mx-auto min-w-max">
-      <button onclick="showSellerTab('orders')" id="sellerTabOrders" class="flex-1 py-3 px-4 text-center font-medium text-orange-600 border-b-2 border-orange-500 transition-all whitespace-nowrap text-[13px] sm:text-sm">Pesanan</button> 
-      <button onclick="showSellerTab('stock')" id="sellerTabStock" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap text-[13px] sm:text-sm">Stok</button> 
-      <button onclick="showSellerTab('recap')" id="sellerTabRecap" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap text-[13px] sm:text-sm">Rekap</button> 
-      <button onclick="showSellerTab('ratings')" id="sellerTabRatings" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap text-[13px] sm:text-sm">Ulasan</button>
-      <button onclick="showSellerTab('notifications')" id="sellerTabNotif" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap text-[13px] sm:text-sm">Notifikasi</button>
-     </div>
-    </nav>
-    
-    <main class="flex-1 p-4 max-w-6xl mx-auto w-full">
+    <main class="flex-1 p-4 pb-16 max-w-6xl mx-auto w-full">
      <div id="sellerOrdersContent" class="space-y-3">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
        <div class="flex flex-col">
@@ -439,10 +454,23 @@
          <div class="text-[11px] text-gray-500">Paling Laku</div>
         </div>
        </div>
+       <!-- Baris kedua: pembatalan (hanya terlihat penjual) -->
+       <div class="grid grid-cols-2 gap-3 mb-1 mt-1">
+        <div class="text-center p-2.5 bg-red-50 rounded-lg border border-red-100">
+         <div class="text-xl font-bold text-red-600" id="cancelledOrdersCount">0</div>
+         <div class="text-[11px] text-gray-500">Pesanan Dibatalkan</div>
+         <div class="text-[9px] text-red-400 font-medium mt-0.5">🔒 Hanya terlihat penjual</div>
+        </div>
+        <div class="text-center p-2.5 bg-yellow-50 rounded-lg border border-yellow-100">
+         <div class="text-xl font-bold text-yellow-600" id="cancelledRevenueImpact">Rp 0</div>
+         <div class="text-[11px] text-gray-500">Potensi Hilang</div>
+         <div class="text-[9px] text-yellow-500 font-medium mt-0.5">dari pembatalan</div>
+        </div>
+       </div>
        
        <div class="mt-4">
         <h4 class="font-medium text-gray-600 mb-2 text-xs">Grafik Penjualan Varian</h4>
-        <div id="salesChart" class="space-y-2"></div>
+        <div id="salesChart"></div>
        </div>
 
        <div class="mt-5 pt-4 border-t border-gray-100">
@@ -512,17 +540,17 @@
       <p class="text-[10px] text-gray-400 mb-1 mt-2">Hubungi Kami:</p>
       <div class="flex justify-center items-center gap-4 mb-5">
        <a href="https://wa.me/6285102203195" target="_blank" class="text-[13px] font-medium text-[#25D366] hover:text-green-400 flex items-center gap-1.5 transition-colors">
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-            Benjiro 
-           </a> 
-           <a href="https://wa.me/6281387658835" target="_blank" class="text-[13px] font-medium text-[#25D366] hover:text-green-400 flex items-center gap-1.5 transition-colors">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-            Echa 
-           </a>
-          </div>
-          <p class="text-[11px] text-gray-400 font-medium">© 2026 Sosis KUI - Portal Penjual</p>
-         </div>
-        </footer>
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.74.45 3.37 1.22 4.8L2 22l5.35-1.18C8.75 21.57 10.33 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm3.83 14.56c-.2.56-1.15 1.07-1.6 1.13-.43.05-1.02.14-2.88-.63-2.23-1.04-3.66-3.32-3.77-3.48-.11-.15-.9-1.2-.9-2.28 0-1.1.56-1.63.76-1.85.2-.21.44-.27.58-.27.15 0 .3.01.43.01.17.01.39-.06.57.34.18.43.62 1.54.67 1.65.06.11.09.24.01.38-.08.15-.12.24-.23.36-.11.12-.24.27-.33.37-.1.1-.21.21-.09.43.12.21.54.9 1.16 1.45.8.71 1.48.93 1.69 1.04.21.11.33.09.45-.05.13-.15.56-.65.71-.87.15-.22.3-.18.5-.11.2.07 1.25.59 1.46.7.21.11.35.16.4.25.05.09.05.51-.15 1.07z"/></svg>
+        Benjiro 
+       </a> 
+       <a href="https://wa.me/6281387658835" target="_blank" class="text-[13px] font-medium text-[#25D366] hover:text-green-400 flex items-center gap-1.5 transition-colors">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.74.45 3.37 1.22 4.8L2 22l5.35-1.18C8.75 21.57 10.33 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm3.83 14.56c-.2.56-1.15 1.07-1.6 1.13-.43.05-1.02.14-2.88-.63-2.23-1.04-3.66-3.32-3.77-3.48-.11-.15-.9-1.2-.9-2.28 0-1.1.56-1.63.76-1.85.2-.21.44-.27.58-.27.15 0 .3.01.43.01.17.01.39-.06.57.34.18.43.62 1.54.67 1.65.06.11.09.24.01.38-.08.15-.12.24-.23.36-.11.12-.24.27-.33.37-.1.1-.21.21-.09.43.12.21.54.9 1.16 1.45.8.71 1.48.93 1.69 1.04.21.11.33.09.45-.05.13-.15.56-.65.71-.87.15-.22.3-.18.5-.11.2.07 1.25.59 1.46.7.21.11.35.16.4.25.05.09.05.51-.15 1.07z"/></svg>
+        Echa 
+       </a>
+      </div>
+      <p class="text-[11px] text-gray-400 font-medium">© 2026 Sosis KUI - Portal Penjual</p>
+     </div>
+    </footer>
    </div>
    
    <div id="notifyModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -607,6 +635,36 @@
      </div>
     </div>
    </div>
+  </div>
+
+  <!-- Rating Popup setelah pesan -->
+  <div id="orderSuccessPopup" class="hidden rating-popup-overlay">
+    <div class="rating-popup relative">
+      <button onclick="closeOrderSuccessPopup()" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 font-bold text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 transition-colors">✕</button>
+      <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 mt-2">
+        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-gray-800 mb-1">Pesanan Berhasil!</h3>
+      <p class="text-xs text-gray-500 mb-4">Terima kasih telah memesan.<br>Bagaimana pengalaman Anda dengan Sosis KUI?</p>
+      <div class="bg-orange-50 rounded-xl p-4 mb-4">
+        <div class="flex justify-center gap-1 mb-3" id="popupStars">
+          <button class="star-btn" onclick="setPopupRating(1)" id="pstar1">★</button>
+          <button class="star-btn" onclick="setPopupRating(2)" id="pstar2">★</button>
+          <button class="star-btn" onclick="setPopupRating(3)" id="pstar3">★</button>
+          <button class="star-btn" onclick="setPopupRating(4)" id="pstar4">★</button>
+          <button class="star-btn" onclick="setPopupRating(5)" id="pstar5">★</button>
+        </div>
+        <textarea id="popupReviewText" rows="2" class="w-full px-3 py-2 border border-orange-200 rounded-lg text-xs text-gray-600 bg-white focus:ring-2 focus:ring-orange-400 resize-none" placeholder="Tulis saran atau kritik di sini... (opsional)"></textarea>
+      </div>
+      <button onclick="submitPopupRating()" class="w-full btn-gradient text-white py-2.5 rounded-xl font-bold text-sm mb-2 hover:shadow-lg transition-all">
+        Kirim Penilaian
+      </button>
+      <button onclick="closeOrderSuccessPopup()" class="w-full text-xs text-gray-400 hover:text-gray-600 py-1 transition-colors">
+        Lain kali saja
+      </button>
+    </div>
   </div>
 
   <script>
@@ -967,10 +1025,16 @@
       const pages = ['homePage', 'buyerLogin', 'sellerLogin', 'buyerDashboard', 'sellerDashboard'];
       pages.forEach(p => {
         const el = document.getElementById(p);
-        if (el) el.classList.add('hidden');
+        if (el) {
+          el.classList.add('hidden');
+          el.classList.remove('flex');
+        }
       });
       const targetPage = document.getElementById(pageId);
-      if (targetPage) targetPage.classList.remove('hidden');
+      if (targetPage) {
+        targetPage.classList.remove('hidden');
+        targetPage.classList.add('flex');
+      }
     }
 
     function showBuyerTab(tab) {
@@ -1588,6 +1652,7 @@
       resetBumbuSelection();
       showBuyerTab('orders');
       showToast('Pesanan berhasil dibuat!');
+      showOrderSuccessPopup();
     }
 
     function updateBuyerOrders() {
@@ -1728,6 +1793,16 @@
           if (stocks[order.variant] !== undefined) {
             stocks[order.variant] += order.quantity;
           }
+          // Simpan log pembatalan (hanya penjual yang tahu)
+          await saveDataDoc({
+            type: 'cancel_log',
+            username: order.username,
+            variant: order.variant,
+            quantity: order.quantity,
+            total_price: order.total_price || 0,
+            cancel_date: new Date().toISOString(),
+            original_order_date: order.order_date
+          });
           deleteDataDoc(order.id || order.__backendId);
         }
         await saveStockData(true);
@@ -2396,19 +2471,95 @@
         }
       }
 
-      const maxVariantCount = Math.max(...Object.values(variantCounts), 1);
+      // Hitung pembatalan - semua order yang statusnya cancelled atau dihapus oleh buyer
+      // Kita deteksi dari hidden_by_buyer yang belum completed (artinya dibatalkan)
+      const cancelledOrders = allData.filter(d => {
+          if (d.type !== 'order') return false;
+          const dDate = new Date(d.order_date);
+          const sameDay = dDate.getFullYear() === currentRecapDate.getFullYear() &&
+                 dDate.getMonth() === currentRecapDate.getMonth() &&
+                 dDate.getDate() === currentRecapDate.getDate();
+          return sameDay && (d.status === 'cancelled' || (d.hidden_by_buyer && d.status !== 'completed'));
+      });
+      // Juga hitung yang dihapus dari seller orders (pakai flag cancelled)
+      const cancelTracker = allData.filter(d => d.type === 'cancel_log' && (() => {
+          const dDate = new Date(d.cancel_date);
+          return dDate.getFullYear() === currentRecapDate.getFullYear() &&
+                 dDate.getMonth() === currentRecapDate.getMonth() &&
+                 dDate.getDate() === currentRecapDate.getDate();
+      })());
+      const totalCancelled = cancelledOrders.length + cancelTracker.length;
+      const cancelRevImpact = cancelledOrders.reduce((s,o)=>s+(o.total_price||0),0) + cancelTracker.reduce((s,o)=>s+(o.total_price||0),0);
+      const cancelEl = document.getElementById('cancelledOrdersCount');
+      if (cancelEl) cancelEl.textContent = totalCancelled;
+      const cancelRevEl = document.getElementById('cancelledRevenueImpact');
+      if (cancelRevEl) cancelRevEl.textContent = 'Rp ' + cancelRevImpact.toLocaleString();
+
+      // Line Chart
       const salesChart = document.getElementById('salesChart');
       if (salesChart) {
-        salesChart.innerHTML = menuItems.map(item => {
-          const count = variantCounts[item.name] || 0;
-          const percentage = (count / maxVariantCount) * 100;
-          return `
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-md overflow-hidden bg-gray-100 flex-shrink-0"><img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover"></div>
-              <div class="flex-1"><div class="flex justify-between text-sm mb-1"><span>${item.name}</span><span class="font-bold">${count}</span></div><div class="h-4 bg-gray-200 rounded-full overflow-hidden"><div class="h-full gradient-bg transition-all duration-500" style="width: ${percentage}%"></div></div></div>
-            </div>
-          `;
-        }).join('');
+        // Build hourly data for selected date
+        const hoursLabels = [];
+        const hoursData = [];
+        for (let h = 6; h <= 22; h++) {
+          hoursLabels.push(h.toString().padStart(2,'0') + ':00');
+          const hourOrders = targetOrders.filter(o => {
+            const d = new Date(o.order_date);
+            return d.getHours() === h;
+          });
+          hoursData.push(hourOrders.reduce((s,o)=>s+(o.total_price||0),0));
+        }
+        salesChart.innerHTML = '<div style="position:relative;height:180px;width:100%"><canvas id="salesLineCanvas"></canvas></div>';
+        requestAnimationFrame(() => {
+          const ctx = document.getElementById('salesLineCanvas');
+          if (!ctx) return;
+          if (window._salesChart) { window._salesChart.destroy(); }
+          window._salesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: hoursLabels,
+              datasets: [{
+                label: 'Pendapatan (Rp)',
+                data: hoursData,
+                borderColor: '#ea580c',
+                backgroundColor: 'rgba(234,88,12,0.10)',
+                borderWidth: 2.5,
+                pointRadius: 4,
+                pointBackgroundColor: '#ea580c',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                fill: true,
+                tension: 0.4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: ctx => 'Rp ' + ctx.parsed.y.toLocaleString('id-ID')
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  ticks: { font: { size: 9 }, maxRotation: 45, color: '#6b7280' },
+                  grid: { color: 'rgba(0,0,0,0.04)' }
+                },
+                y: {
+                  beginAtZero: true,
+                  ticks: { 
+                    font: { size: 9 }, color: '#6b7280',
+                    callback: v => v >= 1000 ? 'Rp' + (v/1000).toFixed(0) + 'k' : 'Rp' + v
+                  },
+                  grid: { color: 'rgba(0,0,0,0.05)' }
+                }
+              }
+            }
+          });
+        });
       }
 
       const variantDetails = document.getElementById('variantDetails');
@@ -2807,20 +2958,36 @@
     }
 
     function deleteRecapOrderGroup(dateIso) {
-        customConfirm('Yakin ingin menghapus transaksi ini? (Stok akan dikembalikan)', async () => {
-            const groupOrders = allData.filter(d => d.type === 'order' && String(d.order_date) === String(dateIso));
-            if (groupOrders.length > 0) {
-                for (const order of groupOrders) {
-                    if (stocks[order.variant] !== undefined) {
-                        stocks[order.variant] += order.quantity;
-                    }
-                    await deleteDataDoc(order.id || order.__backendId);
-                }
-                await saveStockData(true);
-                showToast('Transaksi berhasil dihapus!');
-                debouncedUpdateAllViews();
+        const groupOrders = allData.filter(d => d.type === 'order' && String(d.order_date) === String(dateIso));
+        const isManual = groupOrders.length > 0 && groupOrders[0].is_manual;
+        const warnMsg = isManual 
+          ? 'Yakin ingin menghapus transaksi manual ini? (Stok akan dikembalikan)'
+          : '⚠️ PERHATIAN: Transaksi dari pembeli TIDAK boleh dihapus sembarangan. Hapus hanya jika ada kesalahan data. Yakin tetap menghapus?';
+        customConfirm(warnMsg, async () => {
+            if (!isManual) {
+                // Double confirm for real orders
+                customConfirm('Konfirmasi KEDUA: Data transaksi ini akan dihapus permanen. Lanjutkan?', async () => {
+                    await _doDeleteRecapGroup(dateIso, groupOrders);
+                });
+            } else {
+                await _doDeleteRecapGroup(dateIso, groupOrders);
             }
         });
+    }
+
+    async function _doDeleteRecapGroup(dateIso, groupOrders) {
+        if (groupOrders.length > 0) {
+            loadStockData();
+            for (const order of groupOrders) {
+                if (stocks[order.variant] !== undefined) {
+                    stocks[order.variant] += order.quantity;
+                }
+                await deleteDataDoc(order.id || order.__backendId);
+            }
+            await saveStockData(true);
+            showToast('Transaksi berhasil dihapus!');
+            debouncedUpdateAllViews();
+        }
     }
 
     function renderSellerRatings() {
@@ -2967,6 +3134,61 @@
         const sellerRatings = document.querySelector('#sellerTabRatings');
         if(sellerRatings && sellerRatings.classList.contains('border-b-2')) renderSellerRatings();
       }
+    }
+
+    // ============================================================
+    // POPUP RATING SETELAH PESAN
+    // ============================================================
+    let popupRatingValue = 0;
+
+    function showOrderSuccessPopup() {
+      popupRatingValue = 0;
+      const popup = document.getElementById('orderSuccessPopup');
+      if (popup) popup.classList.remove('hidden');
+      // Reset stars
+      for (let i = 1; i <= 5; i++) {
+        const s = document.getElementById('pstar' + i);
+        if (s) s.classList.remove('active');
+      }
+      const rt = document.getElementById('popupReviewText');
+      if (rt) rt.value = '';
+    }
+
+    function closeOrderSuccessPopup() {
+      const popup = document.getElementById('orderSuccessPopup');
+      if (popup) popup.classList.add('hidden');
+    }
+
+    function setPopupRating(val) {
+      popupRatingValue = val;
+      for (let i = 1; i <= 5; i++) {
+        const s = document.getElementById('pstar' + i);
+        if (s) {
+          if (i <= val) s.classList.add('active');
+          else s.classList.remove('active');
+        }
+      }
+    }
+
+    async function submitPopupRating() {
+      if (!currentBuyer) { closeOrderSuccessPopup(); return; }
+      if (popupRatingValue === 0) { showToast('Pilih bintang terlebih dahulu', 'error'); return; }
+
+      const reviewEl = document.getElementById('popupReviewText');
+      const review = reviewEl ? reviewEl.value.trim() : '';
+
+      const ratingData = {
+        type: 'rating',
+        rating: popupRatingValue,
+        review: review,
+        reviewer_name: currentBuyer.username,
+        username: currentBuyer.username,
+        is_anonymous: false,
+        rating_date: new Date().toISOString()
+      };
+      await saveDataDoc(ratingData);
+      showToast('Terima kasih atas penilaian Anda! ⭐');
+      closeOrderSuccessPopup();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
