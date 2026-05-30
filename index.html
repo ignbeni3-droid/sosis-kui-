@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
- <head>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Sosis KUI - Order System</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <!-- element_sdk removed: not needed outside Claude artifacts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { font-family: 'Poppins', sans-serif; }
@@ -36,14 +35,14 @@
     @keyframes popupIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .star-btn { font-size: 1.6rem; cursor: pointer; color: #d1d5db; transition: color 0.15s, transform 0.15s; border: none; background: none; padding: 2px; }
     .star-btn.active { color: #facc15; transform: scale(1.15); }
-
   </style>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js" type="text/javascript"></script>
-   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
- <body class="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex flex-col overflow-x-hidden text-gray-800">
+<body class="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex flex-col overflow-x-hidden text-gray-800">
   <div id="app" class="flex-1 w-full max-w-[100vw] relative flex flex-col">
    
+   <!-- Loading Screen -->
    <div id="loadingScreen" class="fixed inset-0 gradient-bg flex items-center justify-center z-50 transition-opacity duration-300">
     <div class="text-center text-white">
      <img src="https://github.com/ignbeni3-droid/ben/blob/main/Sosis_KUI-removebg.png?raw=true" alt="Sosis KUI" class="w-24 h-24 mx-auto mb-3 animate-bounce" onerror="this.style.display='none'">
@@ -54,6 +53,7 @@
    
    <div id="toastContainer" class="fixed top-0 left-0 right-0 z-[70] pointer-events-none"></div>
    
+   <!-- Global Modals -->
    <div id="qrisZoomModal" class="hidden qris-modal" onclick="closeQrisZoom()">
     <div class="qris-modal-content" onclick="event.stopPropagation()">
      <button onclick="closeQrisZoom()" class="float-right text-gray-500 hover:text-gray-700 text-2xl font-bold">✕</button> 
@@ -73,6 +73,118 @@
            </div>
        </div>
    </div>
+
+   <div id="notifyModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[90] p-4">
+    <div class="bg-white rounded-xl p-5 max-w-[340px] w-full max-h-[90%] overflow-y-auto relative">
+     <h3 class="text-lg font-bold gradient-text mb-3">Kirim Notifikasi</h3>
+     <div class="mb-3">
+      <label class="block text-[13px] font-medium text-gray-700 mb-1">Status</label> 
+      <select id="notifyStatus" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" onchange="updateNotifyPreview()"> 
+        <option value="pending">Menunggu Konfirmasi</option>
+        <option value="processing">Sedang Diproses</option> 
+        <option value="completed">Selesai</option> 
+      </select>
+     </div>
+     <div class="bg-blue-50 rounded-lg p-2.5 mb-3 text-[11px] text-blue-700">
+      <p class="font-bold mb-1.5">Preview Pesan:</p>
+      <p id="notifyPreview" class="whitespace-pre-wrap"></p>
+     </div>
+     <div class="flex flex-col gap-2">
+      <button onclick="sendNotificationWA()" class="w-full bg-green-500 text-white py-2.5 rounded-lg font-medium hover:bg-green-600 transition-all flex items-center justify-center gap-1.5 text-sm">
+       <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
+       Kirim WhatsApp 
+      </button>
+      <button onclick="closeNotifyModal()" class="w-full py-2.5 border border-gray-200 rounded-lg font-medium text-gray-600 hover:bg-gray-50 transition-all text-sm"> Batal </button>
+     </div>
+    </div>
+   </div>
+
+   <div id="confirmModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4">
+    <div class="bg-white rounded-2xl p-5 max-w-[300px] w-full text-center card-shadow relative">
+     <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+      <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+     </div>
+     <h3 class="text-lg font-bold text-gray-800 mb-2">Konfirmasi</h3>
+     <p id="confirmMessage" class="text-sm text-gray-600 mb-5">Apakah Anda yakin?</p>
+     <div class="flex gap-3">
+      <button id="btnCancelConfirm" class="flex-1 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold text-sm hover:bg-gray-200 transition-all">Batal</button>
+      <button id="btnOkConfirm" class="flex-1 py-2 bg-red-500 text-white rounded-lg font-semibold text-sm hover:bg-red-600 transition-all">Konfirmasi</button>
+     </div>
+    </div>
+   </div>
+
+   <div id="manualOrderModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[90] p-4">
+    <div class="bg-white rounded-2xl p-5 max-w-[360px] w-full card-shadow flex flex-col max-h-[90vh]">
+     <div class="flex justify-between items-center mb-4 shrink-0">
+      <h3 class="text-lg font-bold text-gray-800" id="manualOrderTitle">Penjualan Manual</h3>
+      <button onclick="closeManualOrderModal()" class="text-gray-400 hover:text-red-500 font-bold text-lg">✕</button>
+     </div>
+     <div class="overflow-y-auto hide-scrollbar space-y-3 pr-1 pb-2">
+      <div>
+       <label class="block text-[11px] font-bold text-gray-700 mb-1">Tanggal Transaksi</label>
+       <input type="date" id="manualOrderDate" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none font-bold text-gray-800">
+      </div>
+      <div>
+       <label class="block text-[11px] font-bold text-gray-700 mb-2">Pilih Menu & Jumlah</label>
+       <div id="manualOrderMenuList" class="space-y-2 bg-gray-50 p-2 rounded-lg border border-gray-200">
+        <!-- Rendered dynamically -->
+       </div>
+      </div>
+      <div>
+       <label class="block text-[11px] font-bold text-gray-700 mb-1">Total Harga (Rp) - <span class="font-normal text-gray-500">Bisa diubah manual</span></label>
+       <input type="number" id="manualOrderPrice" min="0" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-orange-500 outline-none font-bold text-orange-600 bg-orange-50 text-center">
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+       <div>
+        <label class="block text-[11px] font-bold text-gray-700 mb-1">Pembayaran</label>
+        <select id="manualOrderPayment" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none font-medium text-gray-800">
+            <option value="cash">Cash / Tunai</option>
+            <option value="qris">QRIS</option>
+        </select>
+       </div>
+       <div>
+        <label class="block text-[11px] font-bold text-gray-700 mb-1">Nama (Opsional)</label>
+        <input type="text" id="manualOrderName" placeholder="Contoh: Alan" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none text-gray-800">
+       </div>
+      </div>
+     </div>
+     <div class="shrink-0 pt-4 mt-2 border-t border-gray-100">
+      <button onclick="submitManualOrder()" class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-2.5 rounded-xl font-bold hover:shadow-lg transition-all text-sm shadow-md shadow-orange-200">
+       Simpan Penjualan
+      </button>
+     </div>
+    </div>
+   </div>
+
+  <!-- Rating Popup -->
+  <div id="orderSuccessPopup" class="hidden rating-popup-overlay">
+    <div class="rating-popup relative">
+      <button onclick="closeOrderSuccessPopup()" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 font-bold text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 transition-colors">✕</button>
+      <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 mt-2">
+        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-gray-800 mb-1">Pesanan Berhasil!</h3>
+      <p class="text-xs text-gray-500 mb-4">Terima kasih telah memesan.<br>Bagaimana pengalaman Anda dengan Sosis KUI?</p>
+      <div class="bg-orange-50 rounded-xl p-4 mb-4">
+        <div class="flex justify-center gap-1 mb-3" id="popupStars">
+          <button class="star-btn" onclick="setPopupRating(1)" id="pstar1">★</button>
+          <button class="star-btn" onclick="setPopupRating(2)" id="pstar2">★</button>
+          <button class="star-btn" onclick="setPopupRating(3)" id="pstar3">★</button>
+          <button class="star-btn" onclick="setPopupRating(4)" id="pstar4">★</button>
+          <button class="star-btn" onclick="setPopupRating(5)" id="pstar5">★</button>
+        </div>
+        <textarea id="popupReviewText" rows="2" class="w-full px-3 py-2 border border-orange-200 rounded-lg text-xs text-gray-600 bg-white focus:ring-2 focus:ring-orange-400 resize-none" placeholder="Tulis saran atau kritik di sini... (opsional)"></textarea>
+      </div>
+      <button onclick="submitPopupRating()" class="w-full btn-gradient text-white py-2.5 rounded-xl font-bold text-sm mb-2 hover:shadow-lg transition-all">
+        Kirim Penilaian
+      </button>
+      <button onclick="closeOrderSuccessPopup()" class="w-full text-xs text-gray-400 hover:text-gray-600 py-1 transition-colors">
+        Lain kali saja
+      </button>
+    </div>
+  </div>
 
    <!-- Home Page -->
    <div id="homePage" class="hidden flex-1 flex-col items-center justify-center p-4">
@@ -190,17 +302,23 @@
 
      <nav class="bg-white w-full max-w-[100vw] overflow-x-auto hide-scrollbar relative z-10 border-b border-gray-100">
       <div class="flex max-w-4xl mx-auto min-w-max">
-       <button onclick="showBuyerTab('menu')" id="tabMenu" class="flex-1 py-3 px-4 text-center font-medium text-orange-600 border-b-2 border-orange-500 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">Menu</button> 
-       <button onclick="showBuyerTab('orders')" id="tabOrders" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">Pesanan</button> 
-       <button onclick="showBuyerTab('cart')" id="tabCart" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap min-w-[80px] relative text-[13px] sm:text-sm">
-         Keranjang <span id="cartBadgeTab" class="hidden bg-orange-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full absolute top-1.5 right-1">0</span>
+       <button onclick="showBuyerTab('menu')" id="tabMenu" class="flex-1 py-3 px-4 flex items-center justify-center gap-1.5 font-medium text-orange-600 border-b-2 border-orange-500 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">
+         Menu
        </button> 
-       <button onclick="showBuyerTab('ratings')" id="tabRatings" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">Rating</button>
+       <button onclick="showBuyerTab('orders')" id="tabOrders" class="flex-1 py-3 px-4 flex items-center justify-center gap-1.5 font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">
+         Pesanan <span id="ordersBadgeTab" class="hidden bg-orange-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+       </button> 
+       <button onclick="showBuyerTab('cart')" id="tabCart" class="flex-1 py-3 px-4 flex items-center justify-center gap-1.5 font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">
+         Keranjang <span id="cartBadgeTab" class="hidden bg-orange-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+       </button> 
+       <button onclick="showBuyerTab('ratings')" id="tabRatings" class="flex-1 py-3 px-4 flex items-center justify-center gap-1.5 font-medium text-gray-500 hover:text-orange-600 transition-all whitespace-nowrap min-w-[80px] text-[13px] sm:text-sm">
+         Rating
+       </button>
       </div>
      </nav>
     </div>
 
-    <main class="flex-1 p-4 pb-24 max-w-4xl mx-auto w-full">
+    <main class="flex-1 p-4 pb-32 max-w-4xl mx-auto w-full relative">
      <div id="menuContent" class="space-y-4">
       <div class="flex items-center gap-2 mb-2">
         <div class="bg-orange-100 text-orange-600 p-1.5 rounded-md"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg></div>
@@ -309,9 +427,16 @@
        <p class="text-gray-500 text-center py-8">Belum ada rating</p>
       </div>
      </div>
+
+     <div id="buyerNotificationsContent" class="hidden space-y-4">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">Notifikasi Saya</h2>
+      <div id="buyerNotifList" class="space-y-3">
+       <p class="text-gray-500 text-center py-8">Belum ada notifikasi</p>
+      </div>
+     </div>
     </main>
 
-    <footer class="bg-transparent py-6 text-center mt-auto border-t border-gray-100">
+    <footer class="bg-transparent py-6 text-center pb-6 mt-auto border-t border-gray-100">
       <p class="text-[10px] text-gray-400 font-bold mb-3 tracking-widest uppercase">DIDUKUNG OLEH:</p>
       <div class="flex justify-center gap-4 mb-5">
        <div class="bg-white p-1.5 rounded-full w-12 h-12 flex items-center justify-center shadow-sm border border-gray-100"><img src="https://github.com/ignbeni3-droid/ben/blob/main/istts-removebg-preview.png?raw=true" alt="ISTTS" class="w-full h-full object-contain" onerror="this.style.display='none'"></div>
@@ -328,25 +453,13 @@
         Echa 
        </a>
       </div>
-      <p class="text-[10px] text-gray-400 font-medium">© 2026 Sosis KUI - Hak Cipta Dilindungi</p>
-    </footer>
-    
-    <div id="floatingCartBar" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-3 pb-3 md:pb-5 shadow-[0_-10px_20px_rgba(0,0,0,0.06)] z-40 transition-transform transform translate-y-0 hidden">
-      <div class="max-w-4xl mx-auto flex justify-between items-center px-2">
-         <div>
-           <div class="text-[11px] text-gray-500 mb-0.5">Total Keranjang</div>
-           <div class="text-lg font-bold text-orange-600" id="floatingCartTotal">Rp 0</div>
-         </div>
-         <button onclick="showBuyerTab('cart')" class="bg-gradient-to-r from-orange-400 to-orange-600 text-white px-4 py-2 rounded-xl font-bold flex items-center gap-1.5 shadow-md shadow-orange-200 hover:scale-105 transition-transform text-sm">
-           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-           Lihat Keranjang
-         </button>
-      </div>
+      <p class="text-[9px] text-gray-400 font-medium">© 2026 Sosis KUI - Hak Cipta Dilindungi</p>
+     </div>
     </div>
    </div>
 
    <!-- Seller Dashboard -->
-   <div id="sellerDashboard" class="hidden flex-col relative flex-1">
+   <div id="sellerDashboard" class="hidden flex-col relative flex-1 min-h-full">
     <div class="sticky top-0 z-40 w-full shadow-md flex flex-col">
      <header class="bg-gray-800 text-white p-4 relative z-20">
       <div class="flex items-center justify-between max-w-6xl mx-auto">
@@ -553,117 +666,17 @@
     </footer>
    </div>
    
-   <div id="notifyModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl p-5 max-w-[340px] w-full max-h-[90%] overflow-y-auto">
-     <h3 class="text-lg font-bold gradient-text mb-3">Kirim Notifikasi</h3>
-     <div class="mb-3">
-      <label class="block text-[13px] font-medium text-gray-700 mb-1">Status</label> 
-      <select id="notifyStatus" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" onchange="updateNotifyPreview()"> 
-        <option value="pending">Menunggu Konfirmasi</option>
-        <option value="processing">Sedang Diproses</option> 
-        <option value="completed">Selesai</option> 
-      </select>
-     </div>
-     <div class="bg-blue-50 rounded-lg p-2.5 mb-3 text-[11px] text-blue-700">
-      <p class="font-bold mb-1.5">Preview Pesan:</p>
-      <p id="notifyPreview" class="whitespace-pre-wrap"></p>
-     </div>
-     <div class="flex flex-col gap-2">
-      <button onclick="sendNotificationWA()" class="w-full bg-green-500 text-white py-2.5 rounded-lg font-medium hover:bg-green-600 transition-all flex items-center justify-center gap-1.5 text-sm">
-       <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-       Kirim WhatsApp </button>
-      <button onclick="closeNotifyModal()" class="w-full py-2.5 border border-gray-200 rounded-lg font-medium text-gray-600 hover:bg-gray-50 transition-all text-sm"> Batal </button>
-     </div>
-    </div>
-   </div>
-
-   <!-- Confirm Modal -->
-   <div id="confirmModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[80] p-4">
-    <div class="bg-white rounded-2xl p-5 max-w-[300px] w-full text-center card-shadow">
-     <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
-      <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-     </div>
-     <h3 class="text-lg font-bold text-gray-800 mb-2">Konfirmasi</h3>
-     <p id="confirmMessage" class="text-sm text-gray-600 mb-5">Apakah Anda yakin?</p>
-     <div class="flex gap-3">
-      <button id="btnCancelConfirm" class="flex-1 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold text-sm hover:bg-gray-200 transition-all">Batal</button>
-      <button id="btnOkConfirm" class="flex-1 py-2 bg-red-500 text-white rounded-lg font-semibold text-sm hover:bg-red-600 transition-all">Konfirmasi</button>
-     </div>
-    </div>
-   </div>
-
-   <!-- Manual Order Modal -->
-   <div id="manualOrderModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[90] p-4">
-    <div class="bg-white rounded-2xl p-5 max-w-[360px] w-full card-shadow flex flex-col max-h-[90vh]">
-     <div class="flex justify-between items-center mb-4 shrink-0">
-      <h3 class="text-lg font-bold text-gray-800" id="manualOrderTitle">Penjualan Manual</h3>
-      <button onclick="closeManualOrderModal()" class="text-gray-400 hover:text-red-500 font-bold text-lg">✕</button>
-     </div>
-     <div class="overflow-y-auto hide-scrollbar space-y-3 pr-1 pb-2">
-      <div>
-       <label class="block text-[11px] font-bold text-gray-700 mb-1">Tanggal Transaksi</label>
-       <input type="date" id="manualOrderDate" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none font-bold text-gray-800">
+   <div id="floatingCartBar" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 md:pb-5 shadow-[0_-10px_30px_rgba(0,0,0,0.15)] z-[90] hidden">
+      <div class="max-w-4xl mx-auto flex justify-between items-center px-4">
+         <div>
+           <div class="text-[11px] text-gray-500 mb-0.5 font-medium">Total Keranjang</div>
+           <div class="text-lg font-black text-orange-600" id="floatingCartTotal">Rp 0</div>
+         </div>
+         <button onclick="showBuyerTab('cart')" class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-orange-200 hover:scale-105 transition-all text-sm">
+           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+           Lihat Keranjang
+         </button>
       </div>
-      <div>
-       <label class="block text-[11px] font-bold text-gray-700 mb-2">Pilih Menu & Jumlah</label>
-       <div id="manualOrderMenuList" class="space-y-2 bg-gray-50 p-2 rounded-lg border border-gray-200">
-        <!-- Rendered dynamically -->
-       </div>
-      </div>
-      <div>
-       <label class="block text-[11px] font-bold text-gray-700 mb-1">Total Harga (Rp) - <span class="font-normal text-gray-500">Bisa diubah manual</span></label>
-       <input type="number" id="manualOrderPrice" min="0" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-orange-500 outline-none font-bold text-orange-600 bg-orange-50 text-center">
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-       <div>
-        <label class="block text-[11px] font-bold text-gray-700 mb-1">Pembayaran</label>
-        <select id="manualOrderPayment" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none font-medium text-gray-800">
-            <option value="cash">Cash / Tunai</option>
-            <option value="qris">QRIS</option>
-        </select>
-       </div>
-       <div>
-        <label class="block text-[11px] font-bold text-gray-700 mb-1">Nama (Opsional)</label>
-        <input type="text" id="manualOrderName" placeholder="Contoh: Alan" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none text-gray-800">
-       </div>
-      </div>
-     </div>
-     <div class="shrink-0 pt-4 mt-2 border-t border-gray-100">
-      <button onclick="submitManualOrder()" class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-2.5 rounded-xl font-bold hover:shadow-lg transition-all text-sm shadow-md shadow-orange-200">
-       Simpan Penjualan
-      </button>
-     </div>
-    </div>
-   </div>
-  </div>
-
-  <!-- Rating Popup setelah pesan -->
-  <div id="orderSuccessPopup" class="hidden rating-popup-overlay">
-    <div class="rating-popup relative">
-      <button onclick="closeOrderSuccessPopup()" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 font-bold text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 transition-colors">✕</button>
-      <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 mt-2">
-        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-        </svg>
-      </div>
-      <h3 class="text-lg font-bold text-gray-800 mb-1">Pesanan Berhasil!</h3>
-      <p class="text-xs text-gray-500 mb-4">Terima kasih telah memesan.<br>Bagaimana pengalaman Anda dengan Sosis KUI?</p>
-      <div class="bg-orange-50 rounded-xl p-4 mb-4">
-        <div class="flex justify-center gap-1 mb-3" id="popupStars">
-          <button class="star-btn" onclick="setPopupRating(1)" id="pstar1">★</button>
-          <button class="star-btn" onclick="setPopupRating(2)" id="pstar2">★</button>
-          <button class="star-btn" onclick="setPopupRating(3)" id="pstar3">★</button>
-          <button class="star-btn" onclick="setPopupRating(4)" id="pstar4">★</button>
-          <button class="star-btn" onclick="setPopupRating(5)" id="pstar5">★</button>
-        </div>
-        <textarea id="popupReviewText" rows="2" class="w-full px-3 py-2 border border-orange-200 rounded-lg text-xs text-gray-600 bg-white focus:ring-2 focus:ring-orange-400 resize-none" placeholder="Tulis saran atau kritik di sini... (opsional)"></textarea>
-      </div>
-      <button onclick="submitPopupRating()" class="w-full btn-gradient text-white py-2.5 rounded-xl font-bold text-sm mb-2 hover:shadow-lg transition-all">
-        Kirim Penilaian
-      </button>
-      <button onclick="closeOrderSuccessPopup()" class="w-full text-xs text-gray-400 hover:text-gray-600 py-1 transition-colors">
-        Lain kali saja
-      </button>
     </div>
   </div>
 
@@ -706,8 +719,6 @@
       { name: 'Bintang', price: 1000, emoji: '⭐', image: 'https://github.com/ignbeni3-droid/ben/blob/main/bintang%202.jpeg?raw=true', desc: 'Menarik' },
       { name: 'Tempura', price: 1000, emoji: '✨', image: 'https://github.com/ignbeni3-droid/ben/blob/main/Tempura%202.jpeg?raw=true', desc: 'Crispy' }
     ];
-
-    const defaultConfig = { app_title: 'Sosis KUI' };
 
     function compressImage(file) {
       return new Promise((resolve) => {
@@ -754,7 +765,6 @@
     }
 
     async function seedHistoricalData() {
-      // Flag eksklusif di database agar kode tidak pernah berjalan dua kali dan menghilangkan "efek jumping"
       const seedFlag = allData.find(d => d.id === 'system_seed_28_mar_final_v3');
       if (seedFlag) return;
 
@@ -763,7 +773,6 @@
       const toDelete = allData.filter(d => {
           if (d.type === 'order' && !d.is_manual && seededUsernames.includes(d.username)) {
               const dDate = new Date(d.order_date);
-              // Hanya menghapus pesanan orang tersebut di bulan Maret 2026 (aman dari bug timezone)
               return dDate.getFullYear() === 2026 && dDate.getMonth() === 2; 
           }
           if (d.type === 'recap') {
@@ -835,15 +844,9 @@
       await saveDataDoc({ id: 'system_seed_28_mar_final_v3', type: 'system', seeded: true });
     }
 
-    // ============================================================
-    // SUPABASE CONFIG
-    // ============================================================
     const SUPABASE_URL  = "https://tksdtsedhhsrnhbgfgtm.supabase.co";
     const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRrc2R0c2VkaGhzcm5oYmdmZ3RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyOTg1MDQsImV4cCI6MjA4OTg3NDUwNH0.aE-5Uh61V7EVHLfsbBCeEI6yxJebMJTvV18dHjnS1NA";
     const TABLE = "sosis_kui_data";
-
-    let supabase = null;
-    let realtimeChannel = null;
 
     let updateViewTimeout = null;
     function debouncedUpdateAllViews() {
@@ -851,7 +854,6 @@
         updateViewTimeout = setTimeout(() => { updateAllViews(); }, 150);
     }
 
-    // ── low-level REST helpers (no npm needed) ──────────────────
     async function sbFetch(path, options = {}) {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
             ...options,
@@ -874,7 +876,6 @@
     async function loadAllData() {
         try {
             const rows = await sbFetch(`${TABLE}?select=id,data&limit=5000`);
-            // each row: { id, data: { ...original fields } }
             allData = rows.map(r => ({ ...r.data, id: r.id, __backendId: r.id }));
         } catch(e) {
             console.error("Gagal memuat data:", e);
@@ -890,7 +891,6 @@
         }
         const id = dataObj.id;
 
-        // update local cache immediately for snappy UI
         const idx = allData.findIndex(d => d.id === id);
         if (idx > -1) allData[idx] = { ...dataObj };
         else allData.push({ ...dataObj });
@@ -911,7 +911,6 @@
 
     async function deleteDataDoc(id) {
         if (!id) return;
-        // update local cache immediately
         allData = allData.filter(d => d.id !== id && d.__backendId !== id);
         debouncedUpdateAllViews();
         try {
@@ -921,7 +920,6 @@
         }
     }
 
-    // ── Realtime polling (Supabase Realtime needs SDK; polling works fine for a food stall) ──
     let pollingInterval = null;
     function startPolling() {
         loadAllData().then(() => {
@@ -931,7 +929,7 @@
         pollingInterval = setInterval(async () => {
             await loadAllData();
             debouncedUpdateAllViews();
-        }, 5000); // refresh every 5 seconds
+        }, 5000);
     }
 
     let hasSeeded = false;
@@ -972,41 +970,42 @@
 
     function customConfirm(message, onConfirm) {
       const modal = document.getElementById('confirmModal');
-      document.getElementById('confirmMessage').textContent = message;
-      modal.classList.remove('hidden');
+      const msgEl = document.getElementById('confirmMessage');
+      if (msgEl) msgEl.textContent = message;
+      
+      if (modal) modal.classList.remove('hidden');
 
       const btnCancel = document.getElementById('btnCancelConfirm');
       const btnOk = document.getElementById('btnOkConfirm');
 
-      const newBtnCancel = btnCancel.cloneNode(true);
-      const newBtnOk = btnOk.cloneNode(true);
-      btnCancel.parentNode.replaceChild(newBtnCancel, btnCancel);
-      btnOk.parentNode.replaceChild(newBtnOk, btnOk);
+      if (btnCancel && btnOk) {
+        const newBtnCancel = btnCancel.cloneNode(true);
+        const newBtnOk = btnOk.cloneNode(true);
+        btnCancel.parentNode.replaceChild(newBtnCancel, btnCancel);
+        btnOk.parentNode.replaceChild(newBtnOk, btnOk);
 
-      newBtnCancel.onclick = () => modal.classList.add('hidden');
-      newBtnOk.onclick = () => {
-        modal.classList.add('hidden');
-        if (onConfirm) onConfirm();
-      };
+        newBtnCancel.onclick = () => { if (modal) modal.classList.add('hidden'); };
+        newBtnOk.onclick = () => {
+          if (modal) modal.classList.add('hidden');
+          if (onConfirm) onConfirm();
+        };
+      }
     }
 
     function loadStockData() {
       const stockData = allData.find(d => d.type === 'stock');
       
-      // Inisialisasi default ke 50 jika kosong
       menuItems.forEach(item => {
         if (stocks[item.name] === undefined) stocks[item.name] = 50;
       });
 
       if (stockData && stockData.items) {
-        // Mode mapping dinamis baru
         menuItems.forEach(item => {
           if (stockData.items[item.name] !== undefined) {
             stocks[item.name] = stockData.items[item.name];
           }
         });
       } else if (stockData) {
-        // Fallback untuk riwayat format lama
         stocks['Nasi Sosis Telur'] = stockData.stock_nasi_sosis_telur !== undefined ? stockData.stock_nasi_sosis_telur : 50;
         stocks['Sosis'] = stockData.stock_sosis !== undefined ? stockData.stock_sosis : 50;
         stocks['Cireng (Isi 4pcs)'] = stockData.stock_cireng !== undefined ? stockData.stock_cireng : 50;
@@ -1038,15 +1037,16 @@
     }
 
     function showBuyerTab(tab) {
-      const tabs = ['menu', 'orders', 'cart', 'ratings'];
-      const contents = ['menuContent', 'ordersContent', 'cartContent', 'ratingsContent'];
-      const tabBtns = ['tabMenu', 'tabOrders', 'tabCart', 'tabRatings'];
+      const tabs = ['menu', 'orders', 'cart', 'ratings', 'notifications'];
+      const contents = ['menuContent', 'ordersContent', 'cartContent', 'ratingsContent', 'buyerNotificationsContent'];
+      const tabBtns = ['tabMenu', 'tabOrders', 'tabCart', 'tabRatings', null];
 
       contents.forEach(c => {
         const el = document.getElementById(c);
         if (el) el.classList.add('hidden');
       });
       tabBtns.forEach(t => {
+        if (!t) return;
         const el = document.getElementById(t);
         if (el) {
           el.classList.remove('text-orange-600', 'border-b-2', 'border-orange-500');
@@ -1059,10 +1059,13 @@
         const contentEl = document.getElementById(contents[idx]);
         if (contentEl) contentEl.classList.remove('hidden');
         
-        const tabEl = document.getElementById(tabBtns[idx]);
-        if (tabEl) {
-          tabEl.classList.add('text-orange-600', 'border-b-2', 'border-orange-500');
-          tabEl.classList.remove('text-gray-500');
+        const tabId = tabBtns[idx];
+        if (tabId) {
+          const tabEl = document.getElementById(tabId);
+          if (tabEl) {
+            tabEl.classList.add('text-orange-600', 'border-b-2', 'border-orange-500');
+            tabEl.classList.remove('text-gray-500');
+          }
         }
       }
 
@@ -1070,11 +1073,19 @@
         startStockPolling();
         const totalItems = cart.reduce((sum, c) => sum + c.quantity, 0);
         const floatingBar = document.getElementById('floatingCartBar');
-        if(totalItems > 0 && floatingBar) floatingBar.classList.remove('hidden');
+        if(totalItems > 0 && floatingBar) {
+            floatingBar.classList.remove('hidden');
+            floatingBar.classList.add('flex');
+            floatingBar.style.display = 'block';
+        }
       } else {
         stopStockPolling();
         const floatingBar = document.getElementById('floatingCartBar');
-        if (floatingBar) floatingBar.classList.add('hidden');
+        if (floatingBar) {
+            floatingBar.classList.add('hidden');
+            floatingBar.classList.remove('flex');
+            floatingBar.style.display = 'none';
+        }
       }
 
       if (tab === 'ratings') renderRatings();
@@ -1419,21 +1430,23 @@
 
     function updateCartBadge() {
       const badgeTabs = document.getElementById('cartBadgeTab');
-      const badgeList = document.getElementById('cartBadge');
       const totalItems = cart.reduce((sum, c) => sum + c.quantity, 0);
       const floatingBar = document.getElementById('floatingCartBar');
+      const menuContent = document.getElementById('menuContent');
       
       if (totalItems > 0) {
         if(badgeTabs) { badgeTabs.textContent = totalItems; badgeTabs.classList.remove('hidden'); }
-        if(badgeList) { badgeList.textContent = totalItems; badgeList.classList.remove('hidden'); }
-        const menuTab = document.getElementById('tabMenu');
-        if(floatingBar && menuTab && menuTab.classList.contains('border-b-2')) {
+        
+        if(floatingBar && menuContent && !menuContent.classList.contains('hidden')) {
             floatingBar.classList.remove('hidden');
+            floatingBar.style.display = 'block';
         }
       } else {
         if(badgeTabs) badgeTabs.classList.add('hidden');
-        if(badgeList) badgeList.classList.add('hidden');
-        if(floatingBar) floatingBar.classList.add('hidden');
+        if(floatingBar) {
+            floatingBar.classList.add('hidden');
+            floatingBar.style.display = 'none';
+        }
       }
 
       const total = cart.reduce((sum, c) => sum + c.total, 0);
@@ -1636,6 +1649,16 @@
         saveDataDoc(orderData);
       }
 
+      saveDataDoc({
+          type: 'notification',
+          username: currentBuyer.username,
+          user_phone: currentBuyer.phone,
+          variant: "Pesanan Diterima",
+          status: 'pending',
+          message: "Pesanan Anda telah diterima dan sedang diproses.",
+          created_at: new Date().toISOString()
+      });
+
       cart = [];
       updateCartBadge();
       renderCart();
@@ -1662,6 +1685,8 @@
       if (!list) return;
 
       if (orders.length === 0) {
+        const badge = document.getElementById('ordersBadgeTab');
+        if (badge) badge.classList.add('hidden');
         list.innerHTML = '<p class="text-gray-500 text-center py-8 text-sm">Belum ada pesanan</p>';
         return;
       }
@@ -1672,6 +1697,20 @@
         if (!grouped[key]) grouped[key] = [];
         grouped[key].push(o);
       });
+
+      const activeOrderGroups = Object.values(grouped).filter(group => {
+          return group[0].status === 'pending' || group[0].status === 'processing';
+      }).length;
+      
+      const ordersBadgeTab = document.getElementById('ordersBadgeTab');
+      if (ordersBadgeTab) {
+          if (activeOrderGroups > 0) {
+              ordersBadgeTab.textContent = activeOrderGroups;
+              ordersBadgeTab.classList.remove('hidden');
+          } else {
+              ordersBadgeTab.classList.add('hidden');
+          }
+      }
 
       window.tempProofs = window.tempProofs || {};
 
@@ -1700,6 +1739,10 @@
             statusColor = "bg-orange-500"; 
             statusText = "Diproses"; 
             estimasi = "~5-10 Menit"; 
+        } else if (o1.status === 'cancelled') {
+            statusColor = "bg-red-500"; 
+            statusText = "Dibatalkan"; 
+            estimasi = "-"; 
         }
 
         const payMethod = o1.payment_method === 'cash' ? 'COD' : 'QRIS';
@@ -1719,7 +1762,7 @@
         }
 
         let actionBtn = '';
-        if (o1.status === 'completed') {
+        if (o1.status === 'completed' || o1.status === 'cancelled') {
           actionBtn = `
             <button onclick="hideBuyerOrderGroup('${dateIso}')" class="bg-red-50 text-red-500 border border-red-100 hover:bg-red-100 p-1.5 rounded transition-colors" title="Hapus Riwayat">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
@@ -1793,7 +1836,6 @@
           if (stocks[order.variant] !== undefined) {
             stocks[order.variant] += order.quantity;
           }
-          // Simpan log pembatalan (hanya penjual yang tahu)
           await saveDataDoc({
             type: 'cancel_log',
             username: order.username,
@@ -1814,12 +1856,59 @@
 
     function updateBuyerNotifications() {
       if (!currentBuyer) return;
-      const notifs = allData.filter(d => d.type === 'notification' && d.username === currentBuyer.username);
+      const notifs = allData.filter(d => d.type === 'notification' && d.username === currentBuyer.username).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+      
       const badge = document.getElementById('notifBadge');
       if (badge) {
         if (notifs.length > 0) { badge.textContent = notifs.length; badge.classList.remove('hidden'); } 
         else { badge.classList.add('hidden'); }
       }
+
+      const list = document.getElementById('buyerNotifList');
+      if (!list) return;
+
+      if (notifs.length === 0) {
+        list.innerHTML = '<p class="text-gray-500 text-center py-8 text-sm">Tidak ada notifikasi</p>';
+        return;
+      }
+
+      list.innerHTML = notifs.map(n => {
+        const d = new Date(n.created_at);
+        const dateStr = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+        let icon = '🔔';
+        let colorClass = 'border-blue-500 bg-blue-50 text-blue-800';
+        
+        if (n.status === 'completed') { icon = '✅'; colorClass = 'border-green-500 bg-green-50 text-green-800'; }
+        else if (n.status === 'processing') { icon = '⏳'; colorClass = 'border-orange-500 bg-orange-50 text-orange-800'; }
+        else if (n.status === 'cancelled') { icon = '❌'; colorClass = 'border-red-500 bg-red-50 text-red-800'; }
+
+        let msg = n.message || `Pesanan Anda berstatus: ${n.status === 'completed' ? 'Selesai' : n.status === 'processing' ? 'Sedang Diproses' : n.status === 'cancelled' ? 'Dibatalkan' : 'Menunggu'}`;
+        
+        if (n.variant === "Pengingat Rating") {
+            msg += ` <a href="#" onclick="showBuyerTab('ratings')" class="text-orange-500 font-bold underline cursor-pointer">Klik di sini</a>`;
+        }
+
+        return `
+          <div class="bg-white rounded-xl p-3 card-shadow border-l-4 ${colorClass} relative">
+            <button onclick="deleteBuyerNotification('${n.id || n.__backendId}')" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors p-1 z-10">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </button>
+            <div class="flex items-start gap-3">
+              <span class="text-xl mt-0.5">${icon}</span>
+              <div class="flex-1 pr-6">
+                <span class="font-bold text-sm block mb-0.5">${n.variant || 'Info Pesanan'}</span>
+                <span class="text-[10px] text-gray-500 font-medium block mb-1.5">${dateStr}</span>
+                <span class="text-xs font-medium leading-snug block">${msg}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function deleteBuyerNotification(id) {
+      deleteDataDoc(id);
+      showToast('Notifikasi dihapus');
     }
 
     function setRating(stars) {
@@ -1861,6 +1950,8 @@
         editingRatingId = null;
         const submitBtn = document.getElementById('submitRatingBtn');
         if (submitBtn) submitBtn.textContent = 'Kirim Rating';
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         const ratingData = {
           type: 'rating', 
@@ -1954,10 +2045,7 @@
         const submitBtn = document.getElementById('submitRatingBtn');
         if (submitBtn) submitBtn.textContent = 'Update Rating';
         
-        const appContainer = document.getElementById('app');
-        if (appContainer) {
-          appContainer.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         showToast('Data ulasan tidak ditemukan', 'error');
       }
@@ -2038,6 +2126,7 @@
         let statusColor = "bg-gray-500"; let statusText = "Menunggu";
         if (o1.status === 'completed') { statusColor = "bg-green-500"; statusText = "Selesai"; }
         else if (o1.status === 'processing') { statusColor = "bg-orange-500"; statusText = "Diproses"; }
+        else if (o1.status === 'cancelled') { statusColor = "bg-red-500"; statusText = "Dibatalkan"; }
 
         const payMethod = o1.payment_method === 'cash' ? 'COD' : 'QRIS';
         const bumbuText = o1.bumbu_selected || 'Tanpa Bumbu';
@@ -2085,17 +2174,23 @@
 
               <div class="flex flex-wrap w-full sm:w-auto gap-1.5 justify-end">
                 ${o1.status === 'pending' ?
-                  `<button onclick="processOrderGroup('${dateIso}')" class="px-2.5 py-1 bg-orange-500 text-white rounded border border-orange-600 text-[10px] font-bold hover:bg-orange-600 transition-all">Proses</button>` : ''
+                  `<button onclick="processOrderGroup('${dateIso}')" class="px-2.5 py-1 bg-orange-500 text-white rounded border border-orange-600 text-[10px] font-bold hover:bg-orange-600 transition-all">Proses</button>
+                   <button onclick="cancelOrderBySeller('${dateIso}')" class="px-2.5 py-1 bg-red-500 text-white rounded border border-red-600 text-[10px] font-bold hover:bg-red-600 transition-all">Tolak</button>` : ''
                 }
                 ${o1.status === 'processing' ?
-                  `<button onclick="completeOrderGroup('${dateIso}')" class="px-2.5 py-1 bg-green-500 text-white rounded border border-green-600 text-[10px] font-bold hover:bg-green-600 transition-all">Selesai</button>` : ''
+                  `<button onclick="completeOrderGroup('${dateIso}')" class="px-2.5 py-1 bg-green-500 text-white rounded border border-green-600 text-[10px] font-bold hover:bg-green-600 transition-all">Selesai</button>
+                   <button onclick="cancelOrderBySeller('${dateIso}')" class="px-2.5 py-1 bg-red-500 text-white rounded border border-red-600 text-[10px] font-bold hover:bg-red-600 transition-all">Batal</button>` : ''
                 }
+                ${(o1.status !== 'cancelled') ? `
                 <button onclick="openNotifyGroupModal('${dateIso}')" class="px-2.5 py-1 bg-[#25D366] text-white rounded text-[10px] font-bold hover:bg-[#128C7E] flex items-center justify-center gap-1 transition-all shadow-sm">
                   WA
                 </button>
+                ` : ''}
+                ${(o1.status === 'completed' || o1.status === 'cancelled') ? `
                 <button onclick="deleteOrderGroup('${dateIso}')" class="px-2 py-1 bg-red-50 text-red-600 border border-red-200 rounded text-[10px] font-bold hover:bg-red-100 flex items-center justify-center gap-1 transition-all">
                   Hapus
                 </button>
+                ` : ''}
               </div>
             </div>
           </div>
@@ -2105,18 +2200,77 @@
 
     async function processOrderGroup(dateIso) {
       const groupOrders = allData.filter(d => d.type === 'order' && String(d.order_date) === String(dateIso));
+      if(groupOrders.length === 0) return;
       for (const order of groupOrders) {
         saveDataDoc({ ...order, status: 'processing' });
       }
+      const o1 = groupOrders[0];
+      const variants = groupOrders.map(o => o.variant).join(', ');
+      
+      saveDataDoc({ 
+        type: 'notification', 
+        username: o1.username, 
+        user_phone: o1.user_phone, 
+        variant: "Sedang Dibuat", 
+        status: 'processing', 
+        message: `${variants} sedang disiapkan.`,
+        created_at: new Date().toISOString() 
+      });
+      
       showToast('Pesanan sedang diproses!');
     }
 
     async function completeOrderGroup(dateIso) {
       const groupOrders = allData.filter(d => d.type === 'order' && String(d.order_date) === String(dateIso));
+      if(groupOrders.length === 0) return;
       for (const order of groupOrders) {
         saveDataDoc({ ...order, status: 'completed' });
       }
+      const o1 = groupOrders[0];
+      
+      saveDataDoc({ type: 'notification', username: o1.username, user_phone: o1.user_phone, variant: "Siap Diambil", status: 'completed', message: "Pesanan Anda sudah siap.", created_at: new Date(Date.now()).toISOString() });
+      saveDataDoc({ type: 'notification', username: o1.username, user_phone: o1.user_phone, variant: "Pesanan Selesai", status: 'completed', message: "Terima kasih telah memesan di Sosis KUI.", created_at: new Date(Date.now() + 10).toISOString() });
+      saveDataDoc({ type: 'notification', username: o1.username, user_phone: o1.user_phone, variant: "Pengingat Rating", status: 'completed', message: "Bagaimana rasa pesanan Anda? Berikan rating.", created_at: new Date(Date.now() + 20).toISOString() });
+
       showToast('Pesanan telah selesai!');
+    }
+    
+    function cancelOrderBySeller(dateIso) {
+      customConfirm('Tolak dan batalkan pesanan ini?', async () => {
+        const groupOrders = allData.filter(d => d.type === 'order' && String(d.order_date) === String(dateIso));
+        if(groupOrders.length === 0) return;
+        
+        loadStockData();
+        for (const order of groupOrders) {
+          if (stocks[order.variant] !== undefined) {
+            stocks[order.variant] += order.quantity;
+          }
+          await saveDataDoc({ ...order, status: 'cancelled' });
+          await saveDataDoc({
+            type: 'cancel_log',
+            username: order.username,
+            variant: order.variant,
+            quantity: order.quantity,
+            total_price: order.total_price || 0,
+            cancel_date: new Date().toISOString(),
+            original_order_date: order.order_date
+          });
+        }
+        await saveStockData(true);
+        
+        const o1 = groupOrders[0];
+        saveDataDoc({ 
+            type: 'notification', 
+            username: o1.username, 
+            user_phone: o1.user_phone, 
+            variant: "Pesanan Dibatalkan", 
+            status: 'cancelled', 
+            message: "Mohon maaf, pesanan Anda dibatalkan oleh penjual.", 
+            created_at: new Date().toISOString() 
+        });
+        
+        showToast('Pesanan ditolak/dibatalkan');
+      });
     }
 
     function deleteOrderGroup(dateIso) {
@@ -2312,13 +2466,11 @@
       const existingStock = allData.find(d => d.type === 'stock');
       const stockData = existingStock ? { ...existingStock } : { type: 'stock' };
       
-      // Mapping ke object items secara dinamis agar aman 100%
       stockData.items = {};
       menuItems.forEach(item => {
          stockData.items[item.name] = stocks[item.name] !== undefined ? stocks[item.name] : 50;
       });
       
-      // Mapping lama tetap disimpan agar tetap kompatibel
       stockData.stock_nasi_sosis_telur = stocks['Nasi Sosis Telur'];
       stockData.stock_sosis = stocks['Sosis'];
       stockData.stock_cireng = stocks['Cireng (Isi 4pcs)'];
@@ -2471,8 +2623,6 @@
         }
       }
 
-      // Hitung pembatalan - semua order yang statusnya cancelled atau dihapus oleh buyer
-      // Kita deteksi dari hidden_by_buyer yang belum completed (artinya dibatalkan)
       const cancelledOrders = allData.filter(d => {
           if (d.type !== 'order') return false;
           const dDate = new Date(d.order_date);
@@ -2481,7 +2631,6 @@
                  dDate.getDate() === currentRecapDate.getDate();
           return sameDay && (d.status === 'cancelled' || (d.hidden_by_buyer && d.status !== 'completed'));
       });
-      // Juga hitung yang dihapus dari seller orders (pakai flag cancelled)
       const cancelTracker = allData.filter(d => d.type === 'cancel_log' && (() => {
           const dDate = new Date(d.cancel_date);
           return dDate.getFullYear() === currentRecapDate.getFullYear() &&
@@ -2495,10 +2644,8 @@
       const cancelRevEl = document.getElementById('cancelledRevenueImpact');
       if (cancelRevEl) cancelRevEl.textContent = 'Rp ' + cancelRevImpact.toLocaleString();
 
-      // Line Chart
       const salesChart = document.getElementById('salesChart');
       if (salesChart) {
-        // Build hourly data for selected date
         const hoursLabels = [];
         const hoursData = [];
         for (let h = 6; h <= 22; h++) {
@@ -2844,7 +2991,7 @@
 
         if (!dateIso) recalcManualTotal();
         
-        modal.classList.remove('hidden');
+        if(modal) modal.classList.remove('hidden');
     }
 
     function adjustManualQty(id, delta, price) {
@@ -2866,11 +3013,13 @@
                 sum += qty * item.price;
             }
         });
-        document.getElementById('manualOrderPrice').value = sum;
+        const orderPriceEl = document.getElementById('manualOrderPrice');
+        if(orderPriceEl) orderPriceEl.value = sum;
     }
 
     function closeManualOrderModal() {
-        document.getElementById('manualOrderModal').classList.add('hidden');
+        const modal = document.getElementById('manualOrderModal');
+        if(modal) modal.classList.add('hidden');
         editingManualOrderDate = null;
     }
 
@@ -2965,7 +3114,6 @@
           : '⚠️ PERHATIAN: Transaksi dari pembeli TIDAK boleh dihapus sembarangan. Hapus hanya jika ada kesalahan data. Yakin tetap menghapus?';
         customConfirm(warnMsg, async () => {
             if (!isManual) {
-                // Double confirm for real orders
                 customConfirm('Konfirmasi KEDUA: Data transaksi ini akan dihapus permanen. Lanjutkan?', async () => {
                     await _doDeleteRecapGroup(dateIso, groupOrders);
                 });
@@ -3042,7 +3190,6 @@
     function deleteRating(identifier) {
       customConfirm('Yakin ingin menghapus ulasan pembeli ini?', async () => {
         const ratingToDelete = allData.find(d => d.type === 'rating' && (String(d.id) === String(identifier) || String(d.__backendId) === String(identifier) || String(d.rating_date) === String(identifier)));
-        
         if (ratingToDelete) {
           await deleteDataDoc(ratingToDelete.id || ratingToDelete.__backendId);
           showToast('Ulasan berhasil dihapus');
@@ -3053,67 +3200,35 @@
       });
     }
 
-    // ============================================================
-    // CSV EXPORT — Unduh semua pesanan sebagai file CSV
-    // ============================================================
     function exportOrdersCSV() {
       const orders = allData.filter(d => d.type === 'order');
-      
       if (orders.length === 0) {
         showToast('Belum ada data pesanan untuk diekspor', 'error');
         return;
       }
-
-      // Sort by date descending
       orders.sort((a, b) => new Date(b.order_date) - new Date(a.order_date));
-
-      const headers = [
-        'Tanggal', 'Waktu', 'Username', 'No. Telepon',
-        'Menu', 'Jumlah', 'Total Harga (Rp)',
-        'Metode Pembayaran', 'Bumbu', 'Catatan', 'Status', 'Manual'
-      ];
-
+      const headers = ['Tanggal', 'Waktu', 'Username', 'No. Telepon', 'Menu', 'Jumlah', 'Total Harga (Rp)', 'Metode Pembayaran', 'Bumbu', 'Catatan', 'Status', 'Manual'];
       const rows = orders.map(o => {
         const d = new Date(o.order_date);
         const tanggal = d.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
         const waktu = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-        
-        // Escape commas & quotes inside CSV fields
         const esc = (v) => {
           const s = String(v ?? '');
-          return s.includes(',') || s.includes('"') || s.includes('\n')
-            ? `"${s.replace(/"/g, '""')}"`
-            : s;
+          return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : s;
         };
-
         return [
-          esc(tanggal),
-          esc(waktu),
-          esc(o.username || '-'),
-          esc(o.user_phone || '-'),
-          esc(o.variant || '-'),
-          esc(o.quantity || 0),
-          esc(o.total_price || 0),
-          esc(o.payment_method === 'cash' ? 'Cash/COD' : 'QRIS'),
-          esc(o.bumbu_selected || '-'),
-          esc(o.catatan || '-'),
-          esc(o.status || 'pending'),
-          esc(o.is_manual ? 'Ya' : 'Tidak')
+          esc(tanggal), esc(waktu), esc(o.username || '-'), esc(o.user_phone || '-'), esc(o.variant || '-'), esc(o.quantity || 0), esc(o.total_price || 0),
+          esc(o.payment_method === 'cash' ? 'Cash/COD' : 'QRIS'), esc(o.bumbu_selected || '-'), esc(o.catatan || '-'), esc(o.status || 'pending'), esc(o.is_manual ? 'Ya' : 'Tidak')
         ].join(',');
       });
-
       const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\n');
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       const now = new Date();
       const filename = `Pesanan_SosisKUI_${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}.csv`;
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      link.href = url; link.download = filename;
+      document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url);
       showToast(`✅ CSV berhasil diunduh (${orders.length} baris)`);
     }
 
@@ -3126,9 +3241,7 @@
       }
       const sellerDash = document.getElementById('sellerDashboard');
       if (sellerDash && !sellerDash.classList.contains('hidden')) {
-        renderSellerOrders(); 
-        renderStockManagement(); 
-        updateSellerNotifications();
+        renderSellerOrders(); renderStockManagement(); updateSellerNotifications();
         const sellerRecap = document.querySelector('#sellerTabRecap');
         if(sellerRecap && sellerRecap.classList.contains('border-b-2')) updateRecap();
         const sellerRatings = document.querySelector('#sellerTabRatings');
@@ -3136,16 +3249,11 @@
       }
     }
 
-    // ============================================================
-    // POPUP RATING SETELAH PESAN
-    // ============================================================
     let popupRatingValue = 0;
-
     function showOrderSuccessPopup() {
       popupRatingValue = 0;
       const popup = document.getElementById('orderSuccessPopup');
       if (popup) popup.classList.remove('hidden');
-      // Reset stars
       for (let i = 1; i <= 5; i++) {
         const s = document.getElementById('pstar' + i);
         if (s) s.classList.remove('active');
@@ -3173,27 +3281,18 @@
     async function submitPopupRating() {
       if (!currentBuyer) { closeOrderSuccessPopup(); return; }
       if (popupRatingValue === 0) { showToast('Pilih bintang terlebih dahulu', 'error'); return; }
-
       const reviewEl = document.getElementById('popupReviewText');
       const review = reviewEl ? reviewEl.value.trim() : '';
-
       const ratingData = {
-        type: 'rating',
-        rating: popupRatingValue,
-        review: review,
-        reviewer_name: currentBuyer.username,
-        username: currentBuyer.username,
-        is_anonymous: false,
-        rating_date: new Date().toISOString()
+        type: 'rating', rating: popupRatingValue, review: review, reviewer_name: currentBuyer.username,
+        username: currentBuyer.username, is_anonymous: false, rating_date: new Date().toISOString()
       };
       await saveDataDoc(ratingData);
       showToast('Terima kasih atas penilaian Anda! ⭐');
       closeOrderSuccessPopup();
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      initApp();
-    });
+    document.addEventListener('DOMContentLoaded', () => { initApp(); });
   </script>
  </body>
 </html>
